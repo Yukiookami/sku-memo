@@ -101,6 +101,25 @@ const deleteData = async (id, storeName) => {
   };
 };
 
+// 批量删除数据
+const deleteDataList = async (idList, storeName) => {
+  let code = 200;
+  let msg = "success";
+
+  const db = await initDB(storeName);
+  const tx = db.transaction(storeName, "readwrite");
+  const store = tx.objectStore(storeName);
+
+  skuIndexDb.deleteMultipleData(idList, store);
+
+  await tx.done;
+
+  return {
+    code,
+    msg,
+  };
+};
+
 // 删除所有数据
 const clearData = async (storeName) => {
   let code = 200;
@@ -165,6 +184,7 @@ const skuIndexDb = {
   deleteData,
   updateData,
   clearData,
+  deleteDataList,
 };
 
 export default skuIndexDb;
