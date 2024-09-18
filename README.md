@@ -47,6 +47,7 @@ npm run dev
 │   │   ├── index.js # 路由配置
 │   ├── store # 状态管理
 │   │   ├── index.js # 状态管理配置
+│   ├── utils # 工具函数
 │   ├── App.vue # 根组件
 │   ├── main.js # 入口文件
 ├── .gitignore # git忽略文件
@@ -62,4 +63,10 @@ npm run dev
 
 ```bash
 npm install vue-router@4
+```
+
+### 使用 idb 来操作 indexDB
+
+```bash
+npm install idb
 ```

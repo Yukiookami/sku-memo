@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "idb": "^8.0.0",
     "vue": "^3.4.37",
     "vue-router": "^4.4.5"
   },
