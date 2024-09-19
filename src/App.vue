@@ -1,7 +1,24 @@
 <template>
-  <router-view />
+  <SkuMainLayout>
+    <!-- 头部 -->
+    <template #header>
+      <SkuHeader />
+    </template>
+    <!-- 内容 -->
+    <template>
+      <router-view />
+    </template>
+    <!-- 底部 -->
+    <template #footer>
+      <SkuFooter />
+    </template>
+  </SkuMainLayout>
 </template>
 
-<script setup></script>
+<script setup>
+import SkuMainLayout from "./components/layout/mainlayout.vue";
+import SkuHeader from "./components/layout/SkuHeader.vue";
+import SkuFooter from "./components/layout/SkuFooter.vue";
+</script>
 
-<style scoped></style>
+<style lang="scss"></style>

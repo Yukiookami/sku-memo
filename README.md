@@ -91,3 +91,9 @@ npm install vue-router@4
 ```bash
 npm install idb
 ```
+
+### 安装 scss
+
+```bash
+npm install sass
+```
