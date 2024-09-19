@@ -5,9 +5,7 @@
       <SkuHeader />
     </template>
     <!-- 内容 -->
-    <template>
-      <router-view />
-    </template>
+    <router-view />
     <!-- 底部 -->
     <template #footer>
       <SkuFooter />
