@@ -4,12 +4,7 @@ const STORE_NAME = "task";
 
 // 任务追加
 const httpTaskAdd = async (param) => {
-  return skuIndexDb.addData(
-    {
-      ...param,
-    },
-    STORE_NAME
-  );
+  return skuIndexDb.addData(param, STORE_NAME);
 };
 
 // 任务修改
