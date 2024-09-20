@@ -101,3 +101,9 @@ npm install idb
 ```bash
 npm install sass
 ```
+
+### 安装 pinia
+
+```bash
+npm install pinia
+```

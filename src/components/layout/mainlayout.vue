@@ -1,3 +1,9 @@
+<!--
+ * @Author: zxy
+ * @Date: 2024-09-20 16:52:44
+ * @LastEditTime: 2024-09-20 20:46:44
+ * @FilePath: \MakeMemo\src\components\layout\mainlayout.vue
+-->
 <template>
   <!-- 主布局 -->
   <div class="sku-main-layout">
@@ -20,7 +26,28 @@
 
 <style lang="scss" scoped>
 .sku-main-layout {
+  position: relative;
+  font-family: "chinese-font";
   height: 100vh;
   width: 100vw;
+  overflow-x: hidden;
+  overflow-y: scroll;
+
+  .header {
+    position: sticky;
+    height: $header-height;
+    top: 0;
+  }
+
+  .context {
+    padding: 20px 10px;
+    min-height: calc(100vh - #{$header-height} - #{$footer-height});
+  }
+
+  .footer {
+    position: sticky;
+    height: $footer-height;
+    bottom: 0;
+  }
 }
 </style>

@@ -1,3 +1,12 @@
+/*
+ * @Author: zxy
+ * @Date: 2024-09-20 16:52:44
+ * @LastEditTime: 2024-09-20 19:04:10
+ * @FilePath: \MakeMemo\src\assets\data\status.js
+ */
+// Desc: 状态数据
+import { createEnum } from "../../utils/index";
+
 // SkuHeader组件使用
 // 头部标题
 export const HeaderTitle = "SkuTodo";
@@ -19,4 +28,12 @@ export const TextType = createEnum({
   h5: "标题5号",
   // 标题6号
   h6: "标题6号",
+});
+
+// 支持的特殊字体
+export const TextFont = createEnum({
+  // 默认
+  chineseFont: "默认",
+  // header标题字体
+  headerTitleFont: "header标题字体",
 });

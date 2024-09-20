@@ -9,7 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@nutui/icons-vue": "^0.1.1",
+    "@nutui/nutui": "^4.3.13",
     "idb": "^8.0.0",
+    "pinia": "^2.2.2",
     "vue": "^3.4.37",
     "vue-router": "^4.4.5"
   },

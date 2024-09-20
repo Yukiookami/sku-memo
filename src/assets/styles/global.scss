@@ -1,0 +1,32 @@
+// rem参照值
+html {
+  font-size: $font-size-base;
+}
+
+div,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+span,
+a,
+li,
+blockquote,
+pre,
+code,
+button {
+  font-size: $font-size-base;
+}
+
+* {
+  /* 隐藏滚动条 */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+
+  &::-webkit-scrollbar {
+    display: none; /* WebKit */
+  }
+}

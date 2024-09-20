@@ -166,5 +166,6 @@ select {
 *,
 *::before,
 *::after {
+  // 使用怪异盒模型
   box-sizing: border-box;
 }
