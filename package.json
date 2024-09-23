@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "cordova-copy-ios": "cp -r dist/* ../SkumemoForIos/www/",
+    "cordova-build-ios": "npm run build && npm run cordova-copy-ios"
   },
   "dependencies": {
     "@nutui/icons-vue": "^0.1.1",

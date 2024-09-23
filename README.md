@@ -107,3 +107,61 @@ npm install sass
 ```bash
 npm install pinia
 ```
+
+### cordova 打包手机端
+
+```bash
+npm install -g cordova
+```
+
+#### cordova 创建项目
+
+```bash
+cordova create SkuMemo com.skumemo SkuMemo
+```
+
+#### cordova 添加平台
+
+```bash
+cordova platform add android
+# 或者
+cordova platform add ios
+```
+
+#### 本体项目打包
+
+```bash
+npm run build
+```
+
+然后把 dist 包复制到 cordova 的 www 目录下
+
+也可以配置 vite.config.js 的 build.outDir 来指定输出目录
+
+```javascript
+export default defineConfig({
+  build: {
+    outDir: "../cordova/www",
+  },
+});
+```
+
+或者在 packge 配置自动化脚本
+
+```json
+{
+  "scripts": {
+    "build": "vite build",
+    "cordova-copy": "cp -r dist/* ../my-cordova-app/www/",
+    "cordova-build": "npm run build && npm run cordova-copy"
+  }
+}
+```
+
+#### cordova 打包
+
+```bash
+cordova build android
+# 或者
+cordova build ios
+```
