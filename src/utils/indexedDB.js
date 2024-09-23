@@ -66,7 +66,6 @@ const getData = async (id, storeName) => {
 
 // 获取所有数据
 const getAllData = async (storeName) => {
-  console.log("getAllData");
   let code = 200;
   let msg = "success";
 
@@ -75,8 +74,6 @@ const getAllData = async (storeName) => {
   const store = tx.objectStore(storeName);
   const allData = await store.getAll();
   await tx.done;
-
-  console.log(allData);
   return {
     code,
     msg,

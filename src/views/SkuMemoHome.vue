@@ -19,12 +19,15 @@
       </div>
     </template>
   </sku-context-swipe>
+
+  <sku-add-task />
 </template>
 
 <script setup>
 import { computed, reactive } from "vue";
-import SkuTask from "../components/common/SkuTask/index.vue";
+import SkuTask from "../components/common/SkuTask/SkuTask.vue";
 import SkuContextSwipe from "../components/layout/SkuContextSwipe.vue";
+import SkuAddTask from "../components/common/SkuAddTask.vue";
 
 const state = reactive({
   // 任务列表

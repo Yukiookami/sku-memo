@@ -14,7 +14,6 @@
 </template>
 
 <script setup>
-import { watch } from "vue";
 import { checkHasAllProperties } from "../../../utils";
 import SkuTaskItem from "./SkuTaskItem.vue";
 
@@ -36,17 +35,10 @@ const emit = defineEmits(["taskChange"]);
 const handleChange = (e) => {
   emit("taskChange", e);
 };
-
-watch(
-  () => props.taskList,
-  (val) => {
-    console.log(val);
-  }
-);
 </script>
 
 <style lang="scss" scoped>
-/* 添加斩断动画的样式 */
+/* 组件增减动画样式 */
 .slice-enter-active,
 .slice-leave-active {
   overflow: hidden;

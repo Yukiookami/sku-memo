@@ -7,6 +7,11 @@
 <template>
   <!-- 主布局 -->
   <div class="sku-main-layout">
+    <!-- 侧边栏 -->
+    <div class="sku-side-bar">
+      <sku-side-bar />
+    </div>
+
     <!-- 头部区域 -->
     <div class="header">
       <slot name="header"></slot>
@@ -22,7 +27,9 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import SkuSideBar from "../common/SkuSideBar/SkuSideBar.vue";
+</script>
 
 <style lang="scss" scoped>
 .sku-main-layout {

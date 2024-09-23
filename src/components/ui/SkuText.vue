@@ -6,7 +6,9 @@
 -->
 <template>
   <!-- 动态使用类名 -->
-  <div class="neon-gradient-effect" :class="[typeClass, fontClass]">
+  <div
+    :class="[typeClass, fontClass, { 'neon-gradient-effect': useNeonGradient }]"
+  >
     {{ title }}
   </div>
 </template>
@@ -26,6 +28,10 @@ const props = defineProps({
   fontType: {
     type: String,
     default: TextFont["默认"],
+  },
+  useNeonGradient: {
+    type: Boolean,
+    default: false,
   },
 });
 

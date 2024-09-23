@@ -35,6 +35,7 @@ const changeData = async () => {
     count: 456,
   });
   state.count = 456;
+  console.log(res);
 };
 
 const removeData = async () => {

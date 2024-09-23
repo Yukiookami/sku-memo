@@ -20,9 +20,12 @@
       }"
     >
       <icon-font width="2rem" height="2rem" :name="item.icon" />
-      <span class="button-title">
-        {{ item.title }}
-      </span>
+      <sku-text
+        class="button-title"
+        :title="item.title"
+        :type="TextType['标题3号']"
+      >
+      </sku-text>
     </div>
   </div>
 </template>
@@ -30,12 +33,14 @@
 <script setup>
 import { checkHasAllProperties } from "../../utils";
 import { useStore } from "../../stores";
+import SkuText from "../ui/SkuText.vue";
+import { TextType } from "../../assets/data/status";
 
 // Pinia store
 const store = useStore();
 
 // 入参
-const props = defineProps({
+defineProps({
   // 底部显示的列表
   footerShowList: {
     type: Array,
@@ -98,7 +103,6 @@ const handleCilckFooterItem = (item) => {
 
     .button-title {
       margin-left: 5px;
-      font-size: 1.2rem;
     }
   }
 }

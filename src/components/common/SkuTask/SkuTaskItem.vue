@@ -62,14 +62,14 @@ watch(
 <style lang="scss" scoped>
 .sku-task-item {
   padding: 1.5rem 1rem;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
+  margin-top: -6px;
 
   .sku-task-checkbox {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    margin-top: -5px;
 
     .task-name {
       font-size: 1rem;
