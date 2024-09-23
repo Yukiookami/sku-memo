@@ -1,5 +1,12 @@
+<!--
+ * @Author: zxy
+ * @Date: 2024-09-23 21:17:36
+ * @LastEditTime: 2024-09-24 08:49:13
+ * @FilePath: \MakeMemo\src\components\common\SkuAddTask\SkuAddTask.vue
+-->
 <template>
   <div class="sku-add-icon" @click="handleClickAddIcon">
+    123123
     <sku-icon height="40px" width="40px" :icon="add" />
   </div>
 
@@ -25,11 +32,11 @@
 </template>
 
 <script setup>
-import SkuIcon from "../ui/SkuIcon.vue";
-import add from "../../assets/images/homePage/添加.svg";
+import SkuIcon from "../../ui/SkuIcon.vue";
+import add from "../../../assets/images/homePage/添加.svg";
 import { reactive } from "vue";
 import { ref } from "vue";
-import { TaskStatus } from "../../assets/data/status";
+import { TaskStatus } from "../../../assets/data/status";
 
 // 提交事件
 const emit = defineEmits(["submit"]);
@@ -39,6 +46,8 @@ const show = ref(false);
 const state = reactive({
   taskName: "",
 });
+
+console.log("state", 123123123);
 
 /**
  * 点击添加按钮

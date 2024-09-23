@@ -1,7 +1,7 @@
 <!--
  * @Author: zxy
  * @Date: 2024-09-20 16:52:44
- * @LastEditTime: 2024-09-20 20:47:39
+ * @LastEditTime: 2024-09-24 08:49:56
  * @FilePath: \MakeMemo\src\views\SkuMemoHome.vue
 -->
 <template>
@@ -28,7 +28,7 @@ import { computed, onBeforeMount, reactive, watch } from "vue";
 import { useStore } from "../stores";
 import SkuTask from "../components/common/SkuTask/SkuTask.vue";
 import SkuContextSwipe from "../components/layout/SkuContextSwipe.vue";
-import SkuAddTask from "../components/common/SkuAddTask.vue";
+import SkuAddTask from "../components/common/SkuAddTask/SkuAddTask.vue";
 import {
   httpTaskAdd,
   httpTaskChange,
