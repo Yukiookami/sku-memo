@@ -18,6 +18,9 @@ import { createPinia } from "pinia";
 // 图标
 import { IconFont } from "@nutui/icons-vue";
 import "@nutui/icons-vue/dist/style_iconfont.css";
+// 复选框
+import { Checkbox, CheckboxGroup } from "@nutui/nutui";
+// nutUI end
 
 import App from "./App.vue";
 import router from "./router";
@@ -30,9 +33,16 @@ const pinia = createPinia();
 
 // 挂载路由
 app.use(router);
-// 挂载图标
-app.use(IconFont);
 // 挂载Pinia
 app.use(pinia);
+
+// 挂载nutUI
+// 挂载图标
+app.use(IconFont);
+// 挂载复选框
+app.use(Checkbox);
+app.use(CheckboxGroup);
+// nutUI end
+
 // 挂载应用实例
 app.mount("#app");

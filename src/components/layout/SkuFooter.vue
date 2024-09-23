@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { checkHasOwnProperty } from "../../utils";
+import { checkHasAllProperties } from "../../utils";
 import { useStore } from "../../stores";
 
 // Pinia store
@@ -45,7 +45,7 @@ const props = defineProps({
         // 验证数组中的每个对象是否包含 'id' 'icon' 'title' 'link' 属性
         const requiredKeys = ["id", "icon", "title", "link"];
 
-        return checkHasOwnProperty(item, requiredKeys);
+        return checkHasAllProperties(requiredKeys, item);
       });
     },
   },
@@ -79,6 +79,8 @@ const handleCilckFooterItem = (item) => {
     height: 100%;
     cursor: pointer;
     font-weight: bolder;
+    color: #000000;
+    transition: all 0.2s ease;
 
     &.active {
       color: $primary-color;

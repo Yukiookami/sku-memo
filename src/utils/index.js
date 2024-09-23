@@ -23,11 +23,11 @@ export const createEnum = (enumObj) => {
 };
 
 /**
- * @description: 检查对象是否有某个属性
- * @param {*} checkKey 想要检查的属性
- * @param {*} obj 检查的对象
- * @return {*}
+ * @description: 检查对象是否包含指定数组中的所有属性
+ * @param {Array} keys 想要检查的属性数组
+ * @param {Object} obj 检查的对象
+ * @return {Boolean} 如果对象包含所有属性则返回 true，否则返回 false
  */
-export const checkHasOwnProperty = (checkKey, obj) => {
-  return Object.prototype.hasOwnProperty.call(obj, checkKey);
+export const checkHasAllProperties = (keys, obj) => {
+  return keys.every((key) => Object.prototype.hasOwnProperty.call(obj, key));
 };

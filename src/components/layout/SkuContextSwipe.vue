@@ -1,0 +1,158 @@
+<template>
+  <div
+    class="sku-context-swipe"
+    ref="swipeContainer"
+    @touchstart="onTouchStart"
+    @touchmove="onTouchMove"
+    @touchend="onTouchEnd"
+  >
+    <!-- 左侧内容 -->
+    <div class="context-swipe-left-context">
+      <slot name="left"></slot>
+    </div>
+    <!-- 右侧内容 -->
+    <div class="context-swipe-right-context">
+      <slot name="right"></slot>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, watch } from "vue";
+import { useStore } from "../../stores";
+
+// 使用 store
+const store = useStore();
+
+// 获取滑动容器
+const swipeContainer = ref(null);
+// 当前触摸点的 x 坐标
+let currentX = 0;
+// 触摸起始点的 x 坐标
+let startX = 0;
+// 是否正在滑动
+let isSwiping = false;
+// 是否发生了滑动
+let hasSwiped = false;
+// 当前显示的内容区块，初始为 left，可选值为 left 和 right
+let currentView = "left";
+
+/**
+ * 设置滑动到左侧
+ */
+const setSwipeToLeft = () => {
+  swipeContainer.value.style.transform = "translateX(0)";
+  currentView = "left";
+};
+
+/**
+ * 设置滑动到右侧
+ */
+const setSwipeToRight = () => {
+  swipeContainer.value.style.transform = "translateX(-100vw)";
+  currentView = "right";
+};
+
+/**
+ * 开始滑动
+ * @param event {TouchEvent | MouseEvent}
+ */
+const onTouchStart = (event) => {
+  // 获取触摸点或鼠标的 x 坐标
+  startX = event.touches ? event.touches[0].clientX : event.clientX;
+  isSwiping = true;
+  hasSwiped = false; // 重置滑动标志
+};
+
+/**
+ * 滑动中
+ * @param event {TouchEvent | MouseEvent}
+ */
+const onTouchMove = (event) => {
+  if (!isSwiping) return;
+  currentX = event.touches ? event.touches[0].clientX : event.clientX;
+  const deltaX = currentX - startX;
+
+  // 定义策略对象
+  const swipeStrategies = {
+    left: (deltaX) => {
+      if (deltaX < 0) {
+        swipeContainer.value.style.transform = `translateX(${deltaX}px)`;
+        hasSwiped = true; // 标记为已滑动
+      }
+    },
+    right: (deltaX) => {
+      if (deltaX > 0) {
+        swipeContainer.value.style.transform = `translateX(${deltaX}px)`;
+        hasSwiped = true; // 标记为已滑动
+      }
+    },
+  };
+
+  // 使用策略模式处理滑动
+  swipeStrategies[currentView](deltaX);
+};
+
+/**
+ * 滑动结束
+ */
+const onTouchEnd = () => {
+  if (!isSwiping || !hasSwiped) return; // 只有在滑动后才处理
+  isSwiping = false;
+  const deltaX = currentX - startX;
+  const threshold = window.innerWidth / 4; // 滑动超过窗口宽度的四分之一则切换
+
+  // 判断滑动方向和当前显示的内容
+  if (Math.abs(deltaX) > threshold) {
+    if (deltaX > 0 && currentView === "right") {
+      // 向右滑动且当前显示的是 right，则切换到 left
+      setSwipeToLeft();
+      // 切换到左侧时，设置 store 中的当前分类为 0
+      store.setActiveIndexInFooter(0);
+    } else if (deltaX < 0 && currentView === "left") {
+      // 向左滑动且当前显示的是 left，则切换到 right
+      setSwipeToRight();
+      // 切换到右侧时，设置 store 中的当前分类为 1
+      store.setActiveIndexInFooter(1);
+    } else {
+      // 已经是 left 或 right，并且继续向边界滑动，不做处理
+      swipeContainer.value.style.transform =
+        currentView === "left" ? "translateX(0)" : "translateX(-100vw)";
+    }
+  } else {
+    // 滑动距离不足，回到原位
+    swipeContainer.value.style.transform =
+      currentView === "left" ? "translateX(0)" : "translateX(-100vw)";
+  }
+};
+
+// 监听底部分类的变化，切换内容区块
+watch(
+  () => store.activeIndexInFooter,
+  (newIndex) => {
+    if (newIndex === 0) {
+      setSwipeToLeft();
+    } else {
+      setSwipeToRight();
+    }
+  }
+);
+</script>
+
+<style lang="scss" scoped>
+.sku-context-swipe {
+  display: flex;
+  width: 200vw;
+  min-height: calc(100vh - $header-height - $footer-height);
+  overflow: hidden;
+  transition: transform 0.1s ease;
+}
+
+.context-swipe-left-context,
+.context-swipe-right-context {
+  width: 100%;
+  padding: 20px 10px;
+  height: 100%;
+  overflow: auto;
+}
+</style>

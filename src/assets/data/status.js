@@ -10,6 +10,7 @@ import { createEnum } from "../../utils/index";
 // SkuHeader组件使用
 // 头部标题
 export const HeaderTitle = "SkuTodo";
+// SkuHeader组件使用 end
 
 // SkuText组件使用
 // 支持的Tpye类型
@@ -36,4 +37,16 @@ export const TextFont = createEnum({
   chineseFont: "默认",
   // header标题字体
   headerTitleFont: "header标题字体",
+});
+// SkuText组件使用 end
+
+// SkuTask组件使用
+// 任务状态
+export const TaskStatus = createEnum({
+  // 未完成
+  "00": "未完成",
+  // 已完成
+  "01": "已完成",
+  // 已删除
+  "02": "已删除",
 });

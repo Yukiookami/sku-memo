@@ -40,7 +40,6 @@
   }
 
   .context {
-    padding: 20px 10px;
     min-height: calc(100vh - #{$header-height} - #{$footer-height});
   }
 

@@ -73,11 +73,11 @@ const fontClass = `sku-font-type-${props.fontType}`;
 }
 
 .sku-font-type-default {
-  font-family: "chinese-font";
+  font-family: "chinese-font", sans-serif;
 }
 
 .sku-font-type-headerTitleFont {
-  font-family: "PermanentMarker-Regular";
+  font-family: "PermanentMarker-Regular", sans-serif;
 }
 
 /* 渐变霓虹效果 */
