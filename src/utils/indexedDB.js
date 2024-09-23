@@ -1,18 +1,44 @@
 import { openDB } from "idb";
 
-// IndexedDB设置
-const DB_NAME = "SkuMemoDB";
-const DB_VERSION = 1;
+// 定义数据库版本号
+const DB_VERSION_LIFE = 1;
+const DB_VERSION_WORK = 1;
 
-// 初始化IndexedDB
+// 定义对象存储名称
+const STORE_NAME_LIFE = "taskForLife";
+const STORE_NAME_WORK = "taskForWork";
+
+// 根据 storeName 获取对应的数据库信息
+const getDBInfo = (storeName) => {
+  let dbName = "";
+  let dbVersion = 1;
+
+  if (storeName === STORE_NAME_LIFE) {
+    dbName = "taskForLife";
+    dbVersion = DB_VERSION_LIFE;
+  } else if (storeName === STORE_NAME_WORK) {
+    dbName = "taskForWork";
+    dbVersion = DB_VERSION_WORK;
+  } else {
+    throw new Error(`未知的 storeName: ${storeName}`);
+  }
+
+  return { dbName, dbVersion };
+};
+
+// 初始化 IndexedDB
 const initDB = async (storeName) => {
-  const db = await openDB(DB_NAME, DB_VERSION, {
+  const { dbName, dbVersion } = getDBInfo(storeName);
+
+  const db = await openDB(dbName, dbVersion, {
     upgrade(db) {
-      // 创建对象存储空间，设置主键为id，自增
-      db.createObjectStore(storeName, {
-        keyPath: "id",
-        autoIncrement: true,
-      });
+      // 创建对象存储空间，设置主键为 id，自增
+      if (!db.objectStoreNames.contains(storeName)) {
+        db.createObjectStore(storeName, {
+          keyPath: "id",
+          autoIncrement: true,
+        });
+      }
     },
   });
   return db;
@@ -28,7 +54,7 @@ const addData = async (data, storeName) => {
   const tx = db.transaction(storeName, "readwrite");
   // 获取对象存储空间
   const store = tx.objectStore(storeName);
-  // 添加数据 返回id
+  // 添加数据 返回 id
   const id = await store.add(data);
   // 等待事务完成
   await tx.done;
@@ -66,6 +92,7 @@ const getData = async (id, storeName) => {
 
 // 获取所有数据
 const getAllData = async (storeName) => {
+  console.log("getAllData");
   let code = 200;
   let msg = "success";
 
@@ -74,6 +101,8 @@ const getAllData = async (storeName) => {
   const store = tx.objectStore(storeName);
   const allData = await store.getAll();
   await tx.done;
+
+  console.log(allData);
   return {
     code,
     msg,
@@ -107,7 +136,9 @@ const deleteDataList = async (idList, storeName) => {
   const tx = db.transaction(storeName, "readwrite");
   const store = tx.objectStore(storeName);
 
-  skuIndexDb.deleteMultipleData(idList, store);
+  for (const id of idList) {
+    await store.delete(id);
+  }
 
   await tx.done;
 
@@ -153,7 +184,7 @@ const updateData = async (id, updatedData, storeName) => {
   if (data) {
     // 更新数据
     const updatedRecord = { ...data, ...updatedData };
-    let id = await store.put(updatedRecord);
+    await store.put(updatedRecord);
     dataForRes = {
       ...updatedRecord,
       id,

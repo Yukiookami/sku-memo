@@ -55,11 +55,11 @@ const handleChange = (e) => {
 }
 
 .slice-enter-active {
-  animation: sliceIn 0.5s forwards;
+  animation: sliceIn 0.3s forwards;
 }
 
 .slice-leave-active {
-  animation: sliceOut 0.5s forwards;
+  animation: sliceOut 0.3s forwards;
 }
 
 @keyframes sliceIn {

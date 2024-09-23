@@ -5,12 +5,15 @@
  * @FilePath: \MakeMemo\src\assets\data\status.js
  */
 // Desc: 状态数据
+import { STORE_NAME_LIFE, STORE_NAME_WORK } from "../../mockApiForIndexDB/task";
 import { createEnum } from "../../utils/index";
 
 // SkuHeader组件使用
 // 头部标题
 export const HeaderTitle = "SkuTodo";
+// ==================================================
 // SkuHeader组件使用 end
+// ==================================================
 
 // SkuText组件使用
 // 支持的Tpye类型
@@ -38,7 +41,9 @@ export const TextFont = createEnum({
   // header标题字体
   headerTitleFont: "header标题字体",
 });
+// ==================================================
 // SkuText组件使用 end
+// ==================================================
 
 // SkuTask组件使用
 // 任务状态
@@ -50,3 +55,39 @@ export const TaskStatus = createEnum({
   // 已删除
   "02": "已删除",
 });
+// ==================================================
+// SkuTask组件使用 end
+// ==================================================
+
+// HomePage,侧边栏使用
+export const Sidebar = createEnum({
+  // 生活
+  生活: 0,
+  // 工作
+  工作: 1,
+});
+// ==================================================
+// HomePage,侧边栏使用 end
+// ==================================================
+
+// HomePage,底部菜单使用
+export const Footer = createEnum({
+  // 未完成
+  未完成: 0,
+  // 已完成
+  已完成: 1,
+});
+// ==================================================
+// HomePage,底部菜单使用 end
+// ==================================================
+
+// API请求分类使用
+export const ApiType = createEnum({
+  // 生活
+  [STORE_NAME_LIFE]: Sidebar["生活"],
+  // 工作
+  [STORE_NAME_WORK]: Sidebar["工作"],
+});
+// ==================================================
+// API请求分类使用 end
+// ==================================================

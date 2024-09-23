@@ -29,6 +29,7 @@ import SkuIcon from "../ui/SkuIcon.vue";
 import add from "../../assets/images/homePage/添加.svg";
 import { reactive } from "vue";
 import { ref } from "vue";
+import { TaskStatus } from "../../assets/data/status";
 
 // 提交事件
 const emit = defineEmits(["submit"]);
@@ -47,7 +48,10 @@ const handleClickAddIcon = () => {
 };
 
 const handleSubmit = () => {
-  emit("submit", state.taskName);
+  emit("submit", {
+    taskName: state.taskName,
+    taskStatus: TaskStatus["未完成"],
+  });
   state.taskName = "";
   show.value = false;
 };

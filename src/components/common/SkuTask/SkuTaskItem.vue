@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { reactive, watch } from "vue";
+import { onBeforeMount, reactive, watch } from "vue";
 import { TaskStatus } from "../../../assets/data/status";
 
 const props = defineProps({
@@ -48,15 +48,18 @@ const handleChange = (e) => {
   emit("taskChange", {
     taskId: props.taskId,
     taskStatus: e ? TaskStatus["已完成"] : TaskStatus["未完成"],
+    taskName: props.taskName,
   });
 };
 
-watch(
-  () => props.taskStatus,
-  (val) => {
-    state.usedTaskStatus = val === TaskStatus["已完成"];
-  }
-);
+onBeforeMount(() => {
+  watch(
+    () => props.taskStatus,
+    (val) => {
+      state.usedTaskStatus = val === TaskStatus["已完成"];
+    }
+  );
+});
 </script>
 
 <style lang="scss" scoped>

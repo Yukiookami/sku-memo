@@ -1,15 +1,16 @@
 import { defineStore } from "pinia";
+import { Footer, Sidebar } from "../assets/data/status";
 
 export const useStore = defineStore({
   id: "app",
   // 定义状态
   state: () => ({
     // footer按钮高亮
-    activeIndexInFooter: 0,
+    activeIndexInFooter: Footer["未完成"],
     // 侧边栏是否展开
     isSidebarOpen: false,
     // 侧边栏访问
-    activeIndexInSidebar: 0,
+    activeIndexInSidebar: Sidebar["生活"],
   }),
   // 定义操作
   actions: {

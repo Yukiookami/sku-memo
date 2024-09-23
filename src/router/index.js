@@ -10,11 +10,6 @@ const routes = [
     name: "home",
     component: () => import("../views/SkuMemoHome.vue"),
   },
-  {
-    path: "/test",
-    name: "test",
-    component: () => import("../views/Test.vue"),
-  },
 ];
 
 const router = createRouter({
