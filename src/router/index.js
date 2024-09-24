@@ -1,10 +1,10 @@
 /*
  * @Author: zxy
  * @Date: 2024-09-20 16:52:44
- * @LastEditTime: 2024-09-24 08:52:41
- * @FilePath: \MakeMemo\src\router\index.js
+ * @LastEditTime: 2024-09-24 20:25:03
+ * @FilePath: \SkuMemo\src\router\index.js
  */
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 
 const routes = [
   {
@@ -19,7 +19,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(),
   routes,
 });
 
