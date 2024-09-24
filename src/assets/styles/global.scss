@@ -30,3 +30,9 @@ button {
     display: none; /* WebKit */
   }
 }
+
+/* 禁用双指缩放手势 */
+html,
+body {
+  touch-action: manipulation;
+}

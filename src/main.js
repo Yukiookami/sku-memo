@@ -1,7 +1,7 @@
 /*
  * @Author: zxy
  * @Date: 2024-09-20 16:52:44
- * @LastEditTime: 2024-09-20 20:34:16
+ * @LastEditTime: 2024-09-25 00:13:16
  * @FilePath: \MakeMemo\src\main.js
  */
 import { createApp } from "vue";
@@ -13,6 +13,8 @@ import "./assets/styles/font.scss";
 import "./assets/styles/global.scss";
 // pinia
 import { createPinia } from "pinia";
+// viewport 控制视窗高度
+import "./utils/viewport"; // 引入 viewport.js
 
 // nutUI
 // 图标
