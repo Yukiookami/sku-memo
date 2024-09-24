@@ -1,7 +1,7 @@
 <!--
  * @Author: zxy
  * @Date: 2024-09-20 16:52:44
- * @LastEditTime: 2024-09-25 00:09:19
+ * @LastEditTime: 2024-09-25 00:20:27
  * @FilePath: \MakeMemo\src\components\layout\mainlayout.vue
 -->
 <template>
@@ -46,16 +46,13 @@ import SkuSideBar from "../common/SkuSideBar/SkuSideBar.vue";
     top: 0;
   }
 
-  .context {
-    min-height: calc(
-      var(--vh, 1vh) * 100 - #{$header-height} - #{$footer-height}
-    );
-  }
-
   .footer {
-    position: sticky;
+    margin-top: $footer-height;
+    position: absolute;
     height: $footer-height;
     bottom: 0;
+    left: 0;
+    right: 0;
   }
 }
 </style>
