@@ -1,12 +1,11 @@
 <!--
  * @Author: zxy
  * @Date: 2024-09-23 21:17:36
- * @LastEditTime: 2024-09-24 08:49:13
- * @FilePath: \MakeMemo\src\components\common\SkuAddTask\SkuAddTask.vue
+ * @LastEditTime: 2024-09-24 12:00:01
+ * @FilePath: \SkuMemo\src\components\common\SkuAddTask\SkuAddTask.vue
 -->
 <template>
   <div class="sku-add-icon" @click="handleClickAddIcon">
-    123123
     <sku-icon height="40px" width="40px" :icon="add" />
   </div>
 
@@ -46,8 +45,6 @@ const show = ref(false);
 const state = reactive({
   taskName: "",
 });
-
-console.log("state", 123123123);
 
 /**
  * 点击添加按钮

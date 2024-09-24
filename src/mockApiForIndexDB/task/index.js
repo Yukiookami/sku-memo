@@ -1,3 +1,9 @@
+/*
+ * @Author: zxy
+ * @Date: 2024-09-19 21:49:07
+ * @LastEditTime: 2024-09-24 12:00:34
+ * @FilePath: \SkuMemo\src\mockApiForIndexDB\task\index.js
+ */
 import skuIndexDb from "../../utils/indexedDB";
 
 const STORE_NAME_LIFE = "taskForLife";
@@ -25,7 +31,6 @@ const httpTaskDelete = async (id, storeName) => {
 
 // 任务列表获取
 const httpTaskGetAll = async (storeName) => {
-  console.log("storeName", storeName);
   return skuIndexDb.getAllData(storeName);
 };
 
