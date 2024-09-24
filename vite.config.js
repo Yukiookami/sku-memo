@@ -1,8 +1,8 @@
 /*
  * @Author: zxy
  * @Date: 2024-09-20 16:52:44
- * @LastEditTime: 2024-09-24 20:24:36
- * @FilePath: \SkuMemo\vite.config.js
+ * @LastEditTime: 2024-09-24 23:31:46
+ * @FilePath: \MakeMemo\vite.config.js
  */
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
@@ -10,6 +10,7 @@ import vue from "@vitejs/plugin-vue";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
+  publicPath: "./",
   base: "./", // 确保资源路径相对于当前目录
   build: {
     assetsDir: "",
