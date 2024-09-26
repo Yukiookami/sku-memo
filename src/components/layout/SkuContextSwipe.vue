@@ -36,6 +36,8 @@ let isSwiping = false;
 let hasSwiped = false;
 // 当前显示的内容区块，初始为 left，可选值为 left 和 right
 let currentView = "left";
+// 滑动起始阈值，只有滑动超过此距离才开始移动容器
+const startThreshold = 20; // 可以根据需要调整此值
 
 /**
  * 设置滑动到左侧
@@ -73,18 +75,25 @@ const onTouchMove = (event) => {
   currentX = event.touches ? event.touches[0].clientX : event.clientX;
   const deltaX = currentX - startX;
 
+  // 如果滑动距离小于起始阈值，不进行任何处理
+  if (Math.abs(deltaX) < startThreshold) {
+    return;
+  }
+
+  hasSwiped = true; // 标记为已滑动
+
   // 定义策略对象
   const swipeStrategies = {
     left: (deltaX) => {
       if (deltaX < 0) {
         swipeContainer.value.style.transform = `translateX(${deltaX}px)`;
-        hasSwiped = true; // 标记为已滑动
       }
     },
     right: (deltaX) => {
       if (deltaX > 0) {
-        swipeContainer.value.style.transform = `translateX(${deltaX}px)`;
-        hasSwiped = true; // 标记为已滑动
+        swipeContainer.value.style.transform = `translateX(${
+          deltaX - window.innerWidth
+        }px)`;
       }
     },
   };
@@ -97,10 +106,15 @@ const onTouchMove = (event) => {
  * 滑动结束
  */
 const onTouchEnd = () => {
-  if (!isSwiping || !hasSwiped) return; // 只有在滑动后才处理
+  if (!isSwiping || !hasSwiped) {
+    isSwiping = false;
+    return; // 只有在滑动后才处理
+  }
   isSwiping = false;
   const deltaX = currentX - startX;
-  const threshold = window.innerWidth / 4; // 滑动超过窗口宽度的四分之一则切换
+
+  // 滑动完成阈值，滑动超过此距离则切换视图
+  const threshold = window.innerWidth / 8; // 将阈值调整为屏幕宽度的1/8，减少切换所需的滑动距离
 
   // 判断滑动方向和当前显示的内容
   if (Math.abs(deltaX) > threshold) {
@@ -143,9 +157,13 @@ watch(
 .sku-context-swipe {
   display: flex;
   width: 200vw;
-  min-height: calc(100vh - $header-height - $footer-height);
-  overflow: hidden;
-  transition: transform 0.1s ease;
+  max-height: calc(
+    var(--vh, 1vh) * 100 - #{$header-height} - #{$footer-height}
+  );
+  overflow-x: hidden;
+  overflow-y: auto;
+  transition: transform 0.2s ease; // 可以适当增加过渡时间，提升滑动体验
+  -webkit-overflow-scrolling: touch; // ios 滚动流畅
 }
 
 .context-swipe-left-context,

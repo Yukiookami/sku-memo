@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import SkuMainLayout from "./components/layout/MainLayout.vue";
+import SkuMainLayout from "./components/layout/SkuMainlayout.vue";
 import SkuHeader from "./components/layout/SkuHeader.vue";
 import SkuFooter from "./components/layout/SkuFooter.vue";
 import { footerMenu } from "./assets/data/componentsData";

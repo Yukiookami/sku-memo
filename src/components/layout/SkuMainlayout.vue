@@ -1,9 +1,3 @@
-<!--
- * @Author: zxy
- * @Date: 2024-09-20 16:52:44
- * @LastEditTime: 2024-09-25 00:26:54
- * @FilePath: \MakeMemo\src\components\layout\mainlayout.vue
--->
 <template>
   <!-- 主布局 -->
   <div class="sku-main-layout">
@@ -35,8 +29,8 @@ import SkuSideBar from "../common/SkuSideBar/SkuSideBar.vue";
 .sku-main-layout {
   position: relative;
   font-family: "chinese-font";
-  height: calc(var(--vh, 1vh) * 100); /* 使用动态计算的视口高度 */
-  height: -webkit-fill-available; /* 使用 webkit-fill-available 解决在Safari中，超出满屏的问题 */
+  max-height: calc(var(--vh, 1vh) * 100); /* 使用动态计算的视口高度 */
+  max-height: -webkit-fill-available; /* 使用 webkit-fill-available 解决在Safari中，超出满屏的问题 */
   width: 100vw;
   overflow-x: hidden;
   overflow-y: scroll;
@@ -45,18 +39,21 @@ import SkuSideBar from "../common/SkuSideBar/SkuSideBar.vue";
     position: sticky;
     height: $header-height;
     top: 0;
+    z-index: 2;
   }
 
   .context {
-    min-height: calc(
+    max-height: calc(
       var(--vh, 1vh) * 100 - #{$header-height} - #{$footer-height}
     );
+    overflow: hidden;
   }
 
   .footer {
     position: sticky;
     height: $footer-height;
     bottom: 0;
+    z-index: 2;
   }
 }
 </style>
