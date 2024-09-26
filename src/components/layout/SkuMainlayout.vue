@@ -29,8 +29,8 @@ import SkuSideBar from "../common/SkuSideBar/SkuSideBar.vue";
 .sku-main-layout {
   position: relative;
   font-family: "chinese-font";
-  max-height: calc(var(--vh, 1vh) * 100); /* 使用动态计算的视口高度 */
-  max-height: -webkit-fill-available; /* 使用 webkit-fill-available 解决在Safari中，超出满屏的问题 */
+  height: calc(var(--vh, 1vh) * 100); /* 使用动态计算的视口高度 */
+  height: -webkit-fill-available; /* 使用 webkit-fill-available 解决在Safari中，超出满屏的问题 */
   width: 100vw;
   overflow-x: hidden;
   overflow-y: scroll;
@@ -43,9 +43,7 @@ import SkuSideBar from "../common/SkuSideBar/SkuSideBar.vue";
   }
 
   .context {
-    max-height: calc(
-      var(--vh, 1vh) * 100 - #{$header-height} - #{$footer-height}
-    );
+    height: calc(var(--vh, 1vh) * 100 - #{$header-height} - #{$footer-height});
     overflow: hidden;
   }
 

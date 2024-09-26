@@ -160,9 +160,7 @@ watch(
 .sku-context-swipe {
   display: flex;
   width: 200vw;
-  max-height: calc(
-    var(--vh, 1vh) * 100 - #{$header-height} - #{$footer-height}
-  );
+  height: calc(var(--vh, 1vh) * 100 - #{$header-height} - #{$footer-height});
   overflow-x: hidden;
   overflow-y: auto;
   transition: transform 0.2s ease; // 可以适当增加过渡时间，提升滑动体验
