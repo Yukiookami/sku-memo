@@ -37,3 +37,8 @@ body {
   touch-action: manipulation;
   overflow: hidden;
 }
+
+/* 设置输入框字体大小, 最小为16px，防止ios自动放大 */
+.nut-input .input-text {
+  font-size: $font-size-base !important;
+}

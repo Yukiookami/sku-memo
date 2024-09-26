@@ -22,7 +22,7 @@
         @keypress.enter="handleSubmit"
       />
       <div class="add-task-fun-sec">
-        <nut-button type="info" @click="handleSubmit" size="mini">
+        <nut-button type="info" @click="handleSubmit" size="small">
           添加
         </nut-button>
       </div>
@@ -87,6 +87,10 @@ const handleSubmit = () => {
   flex-direction: column;
 
   .add-task-fun-sec {
+    ::v-deep .nut-button__wrap {
+      margin-top: -1px;
+    }
+
     height: 39px;
     padding: 0 10px;
     display: flex;

@@ -5,6 +5,9 @@
     @touchstart="onTouchStart"
     @touchmove="onTouchMove"
     @touchend="onTouchEnd"
+    @mousedown="onTouchStart"
+    @mousemove="onTouchMove"
+    @mouseup="onTouchEnd"
   >
     <!-- 左侧内容 -->
     <div class="context-swipe-left-context">
