@@ -1,7 +1,7 @@
 <!--
  * @Author: zxy
  * @Date: 2024-09-20 16:52:44
- * @LastEditTime: 2024-09-29 18:35:42
+ * @LastEditTime: 2024-09-29 19:21:58
  * @FilePath: \MakeMemo\src\views\SkuMemoHome.vue
 -->
 <template>
@@ -34,7 +34,7 @@ import {
   httpTaskChange,
   httpTaskGetAll,
 } from "../mockApiForIndexDB/task";
-import { ApiType, sortType } from "../assets/data/status";
+import { ApiType, sortType, TaskPriority } from "../assets/data/status";
 
 // Pinia store
 const store = useStore();
@@ -93,6 +93,8 @@ const getAllTaskList = async (dbName) => {
 
   // 根据排序方式排序
   state.taskList.sort((a, b) => {
+    a.taskPriority = a.taskPriority ?? TaskPriority["无优先级"];
+    b.taskPriority = b.taskPriority ?? TaskPriority["无优先级"];
     return sortStrategies[state.nowSortType](a, b);
   });
 };
