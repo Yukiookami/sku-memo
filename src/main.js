@@ -1,7 +1,7 @@
 /*
  * @Author: zxy
  * @Date: 2024-09-20 16:52:44
- * @LastEditTime: 2024-09-25 00:13:16
+ * @LastEditTime: 2024-09-29 17:03:16
  * @FilePath: \MakeMemo\src\main.js
  */
 import { createApp } from "vue";
@@ -15,13 +15,22 @@ import "./assets/styles/global.scss";
 import { createPinia } from "pinia";
 // viewport 控制视窗高度
 import "./utils/viewport"; // 引入 viewport.js
+// 引入字体图标
+import "./assets/font/iconfont/style.css";
 
 // nutUI
 // 图标
 import { IconFont } from "@nutui/icons-vue";
 import "@nutui/icons-vue/dist/style_iconfont.css";
 // 复选框, 弹出层, 输入框, 按钮
-import { CheckboxGroup, Checkbox, Popup, Input, Button } from "@nutui/nutui";
+import {
+  CheckboxGroup,
+  Checkbox,
+  Popup,
+  Input,
+  Button,
+  Picker,
+} from "@nutui/nutui";
 import "@nutui/nutui/dist/style.css";
 // nutUI end
 
@@ -51,6 +60,8 @@ app.use(Popup);
 app.use(Input);
 // 挂载按钮
 app.use(Button);
+// 挂载选择器
+app.use(Picker);
 // nutUI end
 
 // 挂载应用实例

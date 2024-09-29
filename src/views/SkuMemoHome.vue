@@ -1,7 +1,7 @@
 <!--
  * @Author: zxy
  * @Date: 2024-09-20 16:52:44
- * @LastEditTime: 2024-09-24 08:49:56
+ * @LastEditTime: 2024-09-29 18:35:42
  * @FilePath: \MakeMemo\src\views\SkuMemoHome.vue
 -->
 <template>
@@ -34,7 +34,7 @@ import {
   httpTaskChange,
   httpTaskGetAll,
 } from "../mockApiForIndexDB/task";
-import { ApiType } from "../assets/data/status";
+import { ApiType, sortType } from "../assets/data/status";
 
 // Pinia store
 const store = useStore();
@@ -52,6 +52,8 @@ const state = reactive({
   ),
   // 当前使用的DB
   nowUseDBName: ApiType[store.activeIndexInSidebar],
+  // 当前排序方式
+  nowSortType: sortType["优先级升序"],
 });
 
 /**
@@ -83,6 +85,16 @@ const getAllTaskList = async (dbName) => {
   // 获取任务列表
   const res = await httpTaskGetAll(dbName);
   state.taskList = res.data ?? [];
+
+  const sortStrategies = {
+    [sortType["优先级升序"]]: (a, b) => a.taskPriority - b.taskPriority,
+    [sortType["优先级降序"]]: (a, b) => b.taskPriority - a.taskPriority,
+  };
+
+  // 根据排序方式排序
+  state.taskList.sort((a, b) => {
+    return sortStrategies[state.nowSortType](a, b);
+  });
 };
 
 /**

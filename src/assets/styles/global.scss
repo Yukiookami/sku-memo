@@ -42,3 +42,15 @@ body {
 .nut-input .input-text {
   font-size: $font-size-base !important;
 }
+
+/* 优先级类 */
+@each $priority, $color in $priority-color {
+  .sku-priority-#{$priority} {
+    color: $color !important;
+
+    i,
+    i::before {
+      color: $color !important;
+    }
+  }
+}

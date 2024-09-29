@@ -1,8 +1,8 @@
 <!--
  * @Author: zxy
  * @Date: 2024-09-19 21:49:07
- * @LastEditTime: 2024-09-24 20:48:49
- * @FilePath: \SkuMemo\src\components\common\SkuTask\SkuTaskItem.vue
+ * @LastEditTime: 2024-09-29 17:34:05
+ * @FilePath: \MakeMemo\src\components\common\SkuTask\SkuTaskItem.vue
 -->
 <template>
   <div class="sku-task-item">
@@ -10,15 +10,22 @@
       @change="handleChange"
       v-model="state.usedTaskStatus"
       class="sku-task-checkbox"
+      :class="`sku-priority-${taskPriority}`"
     >
-      <span class="task-name" :class="{ closed: state.usedTaskStatus }">
+      <span
+        class="task-name"
+        :class="[
+          { closed: state.usedTaskStatus },
+          `sku-priority-${taskPriority}`,
+        ]"
+      >
         {{ props.taskName }}
       </span>
       <template #icon>
-        <img src="../../../assets/images/checkList/未选中.svg" alt="未完成" />
+        <i class="icon-select"></i>
       </template>
       <template #checkedIcon>
-        <img src="../../../assets/images/checkList/选中.svg" alt="已完成" />
+        <i class="icon-selected"></i>
       </template>
     </nut-checkbox>
   </div>
@@ -26,7 +33,7 @@
 
 <script setup>
 import { onBeforeMount, reactive, watch } from "vue";
-import { TaskStatus } from "../../../assets/data/status";
+import { TaskPriority, TaskStatus } from "../../../assets/data/status";
 
 const props = defineProps({
   taskName: {
@@ -40,6 +47,10 @@ const props = defineProps({
   taskId: {
     type: Number,
     required: true,
+  },
+  taskPriority: {
+    type: String,
+    default: TaskPriority["无优先级"],
   },
 });
 
@@ -82,11 +93,10 @@ onBeforeMount(() => {
 
     .task-name {
       font-size: 1rem;
-      margin-left: 0.5rem;
 
       &.closed {
         text-decoration: line-through;
-        color: #ccc;
+        color: #ccc !important;
       }
     }
 

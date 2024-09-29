@@ -1,3 +1,9 @@
+<!--
+ * @Author: zxy
+ * @Date: 2024-09-20 16:52:44
+ * @LastEditTime: 2024-09-29 17:21:58
+ * @FilePath: \MakeMemo\src\components\common\SkuTask\SkuTask.vue
+-->
 <template>
   <div class="sku-task">
     <transition-group name="slice" tag="div">
@@ -7,6 +13,7 @@
         :taskName="item.taskName"
         :taskStatus="item.taskStatus"
         :taskId="item.id"
+        :taskPriority="item.taskPriority"
         @taskChange="handleChange"
       />
     </transition-group>

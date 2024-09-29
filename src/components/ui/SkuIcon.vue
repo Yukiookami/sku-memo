@@ -1,6 +1,18 @@
+<!--
+ * @Author: zxy
+ * @Date: 2024-09-20 16:52:44
+ * @LastEditTime: 2024-09-29 16:41:38
+ * @FilePath: \MakeMemo\src\components\ui\SkuIcon.vue
+-->
 <template>
   <div class="sku-icon">
-    <img :src="icon" :alt="icon" :style="{ width: width, height: height }" />
+    <img
+      v-if="!useInnerSvg"
+      :src="icon"
+      :alt="icon"
+      :style="{ width: width, height: height }"
+    />
+    <div v-else v-html="icon"></div>
   </div>
 </template>
 
@@ -17,6 +29,10 @@ defineProps({
   height: {
     type: String,
     default: "2rem",
+  },
+  useInnerSvg: {
+    type: Boolean,
+    default: false,
   },
 });
 </script>
