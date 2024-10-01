@@ -36,39 +36,36 @@
         </template>
       </nut-checkbox>
 
-      <template #right>
+      <!-- 左侧按钮区域 -->
+      <template #left>
         <!-- 功能按钮区域 -->
-        <div class="sku-item-func-sec">
-          <nut-button type="info" shape="square" @click="handleClickEdit">
-            编辑
-          </nut-button>
-
-          <nut-button shape="square" type="danger" @click="handleClickDel">
-            删除
-          </nut-button>
+        <div class="sku-item-func-sec-left">
+          <nut-button shape="square" type="info"> 编辑 </nut-button>
         </div>
       </template>
+      <!-- 左侧按钮区域end -->
+
+      <!-- 右侧按钮区域 -->
+      <template #right>
+        <!-- 功能按钮区域 -->
+        <div class="sku-item-func-sec-right">
+          <nut-button shape="square" type="danger"> 删除 </nut-button>
+        </div>
+      </template>
+      <!-- 右侧按钮区域end -->
     </van-swipe-cell>
     <!-- checkbox任务主题 -->
-
-    <!-- 删除确认框 -->
-    <van-dialog
-      v-model:show="state.showDelDialog"
-      title="删除任务"
-      message="确定要删除该任务吗？"
-      showCancelButton
-      confirmButtonText="确定"
-      cancelButtonText="取消"
-      @confirm="handleDelTask"
-    ></van-dialog>
-    <!-- 删除确认框end -->
   </div>
   <!-- 单个任务end -->
 </template>
 
 <script setup>
 import { onBeforeMount, reactive, watch } from "vue";
-import { TaskPriority, TaskStatus } from "../../../assets/data/status";
+import {
+  CloseCellType,
+  TaskPriority,
+  TaskStatus,
+} from "../../../assets/data/status";
 import { useStore } from "../../../stores";
 
 const store = useStore();
@@ -97,8 +94,6 @@ const emit = defineEmits(["taskChange"]);
 const state = reactive({
   // 确认是否完成任务
   usedTaskStatus: props.taskStatus === TaskStatus["已完成"],
-  // 是否显示删除确认框
-  showDelDialog: false,
 });
 
 /**
@@ -115,37 +110,29 @@ const handleChange = (e) => {
 };
 
 /**
- *  打开删除框
- */
-const handleClickDel = () => {
-  state.showDelDialog = true;
-};
-
-/**
- * 确认删除任务
- */
-const handleDelTask = () => {
-  // store.delTask(props.taskId);
-};
-
-/**
- * 编辑任务
- */
-const handleClickEdit = () => {
-  // store.editTask(props.taskId);
-};
-
-/**
  * 关闭前的操作, 如果点击的是删除按钮则阻止关闭
  * @param action
  * @param done
  */
-const handleBeforeClose = () => {
-  if (state.showDelDialog) {
-    return false;
-  } else {
-    return true;
-  }
+const handleBeforeClose = ({ position }) => {
+  const callFunc = {
+    [CloseCellType["编辑"]]: () => {
+      console.log("点击了编辑");
+    },
+    [CloseCellType["删除"]]: () => {
+      console.log("点击了删除");
+    },
+    [CloseCellType["主体"]]: () => {
+      console.log("点击了主体");
+    },
+    [CloseCellType["外部"]]: () => {
+      console.log("点击了外部");
+    },
+  };
+
+  callFunc[position]();
+
+  console.log(position);
 };
 
 onBeforeMount(() => {
@@ -189,7 +176,7 @@ $button-radius: 5px;
     }
   }
 
-  .sku-item-func-sec {
+  .sku-item-func-sec-right {
     height: 100%;
     margin-left: 1px;
 
@@ -197,9 +184,23 @@ $button-radius: 5px;
       height: 100%;
     }
 
-    ::v-deep .nut-button--square:last-child {
+    ::v-deep .nut-button--square {
       border-top-right-radius: $button-radius;
       border-bottom-right-radius: $button-radius;
+    }
+  }
+
+  .sku-item-func-sec-left {
+    height: 100%;
+    margin-right: 1px;
+
+    ::v-deep .nut-button--square {
+      height: 100%;
+    }
+
+    ::v-deep .nut-button--square {
+      border-top-left-radius: $button-radius;
+      border-bottom-left-radius: $button-radius;
     }
   }
 }

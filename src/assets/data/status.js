@@ -66,9 +66,19 @@ export const TaskStatus = createEnum({
   "04": "已暂停",
 });
 
-// ==================================================
+// 关闭滑动单元格的类型（vant）
+export const CloseCellType = createEnum({
+  // 左侧区域（编辑）
+  编辑: "left",
+  // 右侧区域（删除）
+  删除: "right",
+  // 主体部分
+  主体: "cell",
+  // 外部
+  外部: "outside",
+});
+
 // 任务优先级 数字越小优先级越高， 无优先级默认最低
-// ==================================================
 export const TaskPriority = createEnum({
   "00": "优先级1",
   "01": "优先级2",
