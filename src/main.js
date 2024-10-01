@@ -22,7 +22,7 @@ import "./assets/font/iconfont/style.css";
 // 图标
 import { IconFont } from "@nutui/icons-vue";
 import "@nutui/icons-vue/dist/style_iconfont.css";
-// 复选框, 弹出层, 输入框, 按钮
+// 复选框, 弹出层, 输入框, 按钮, 选择器,
 import {
   CheckboxGroup,
   Checkbox,
@@ -33,6 +33,11 @@ import {
 } from "@nutui/nutui";
 import "@nutui/nutui/dist/style.css";
 // nutUI end
+// vant
+// 滑动单元格
+import { SwipeCell } from "vant";
+import 'vant/lib/index.css';
+// vant end
 
 import App from "./App.vue";
 import router from "./router";
@@ -63,6 +68,11 @@ app.use(Button);
 // 挂载选择器
 app.use(Picker);
 // nutUI end
+
+// 挂载vant
+// 挂载滑动单元格
+app.use(SwipeCell);
+// vant end
 
 // 挂载应用实例
 app.mount("#app");

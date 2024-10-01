@@ -41,6 +41,12 @@ let hasSwiped = false;
 let currentView = "left";
 // 滑动起始阈值，只有滑动超过此距离才开始移动容器
 const startThreshold = 20; // 可以根据需要调整此值
+// 长按定时器
+let longPressTimer = null;
+// 是否允许滑动
+let allowSwipe = false;
+// 长按时间
+const longPressTime = 500; // 可以根据需要调整此值
 
 /**
  * 设置滑动到左侧
@@ -67,6 +73,13 @@ const onTouchStart = (event) => {
   startX = event.touches ? event.touches[0].clientX : event.clientX;
   isSwiping = true;
   hasSwiped = false; // 重置滑动标志
+  allowSwipe = false; // 重置允许滑动标志
+
+  // 设置长按定时器
+  longPressTimer = setTimeout(() => {
+    allowSwipe = true; // 1.5秒后允许滑动
+    store.setIsTouchForContextMove(true); // 设置 store 中的是否内容滑动状态为 true
+  }, longPressTime);
 };
 
 /**
@@ -85,30 +98,39 @@ const onTouchMove = (event) => {
 
   hasSwiped = true; // 标记为已滑动
 
-  // 定义策略对象
-  const swipeStrategies = {
-    left: (deltaX) => {
-      if (deltaX < 0) {
-        swipeContainer.value.style.transform = `translateX(${deltaX}px)`;
-      }
-    },
-    right: (deltaX) => {
-      if (deltaX > 0) {
-        swipeContainer.value.style.transform = `translateX(${
-          deltaX - window.innerWidth
-        }px)`;
-      }
-    },
-  };
+  // 如果允许滑动，则处理滑动事件
+  if (allowSwipe) {
+    // 定义策略对象
+    const swipeStrategies = {
+      left: (deltaX) => {
+        if (deltaX < 0) {
+          swipeContainer.value.style.transform = `translateX(${deltaX}px)`;
+        }
+      },
+      right: (deltaX) => {
+        if (deltaX > 0) {
+          swipeContainer.value.style.transform = `translateX(${
+            deltaX - window.innerWidth
+          }px)`;
+        }
+      },
+    };
 
-  // 使用策略模式处理滑动
-  swipeStrategies[currentView](deltaX);
+    // 使用策略模式处理滑动
+    swipeStrategies[currentView](deltaX);
+  }
 };
 
 /**
  * 滑动结束
  */
 const onTouchEnd = () => {
+  clearTimeout(longPressTimer); // 清除长按定时器
+  // 如果不允许滑动，则不进行任何处理
+  if (!allowSwipe) {
+    return;
+  }
+  store.setIsTouchForContextMove(false); // 设置 store 中的是否内容滑动状态为 false
   if (!isSwiping || !hasSwiped) {
     isSwiping = false;
     return; // 只有在滑动后才处理
@@ -164,7 +186,7 @@ watch(
   overflow-x: hidden;
   overflow-y: auto;
   transition: transform 0.2s ease; // 可以适当增加过渡时间，提升滑动体验
-  -webkit-overflow-scrolling: touch; // ios 滚动流畅
+  // -webkit-overflow-scrolling: touch; // ios 滚动流畅
 }
 
 .context-swipe-left-context,

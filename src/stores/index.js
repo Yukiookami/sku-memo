@@ -11,6 +11,8 @@ export const useStore = defineStore({
     isSidebarOpen: false,
     // 侧边栏访问
     activeIndexInSidebar: Sidebar["生活"],
+    // 是否触发左右内容滑动
+    isTouchForContextMove: false,
   }),
   // 定义操作
   actions: {
@@ -25,6 +27,10 @@ export const useStore = defineStore({
     // 设置侧边栏访问
     setActiveIndexInSidebar(index) {
       this.activeIndexInSidebar = index;
+    },
+    // 设置是否触发左右内容滑动
+    setIsTouchForContextMove(isMove) {
+      this.isTouchForContextMove = isMove;
     },
   },
 });

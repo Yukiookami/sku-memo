@@ -2,7 +2,7 @@
 
 ## 版本号
 
-v0.2.0
+v0.3.0
 
 ## 介绍
 
@@ -19,6 +19,7 @@ v0.2.0
 - pinia 状态管理
 - vue-router 路由管理
 - nutui UI 框架 <https://nutui.jd.com/h5/vue/4x/#/zh-CN/component/button>
+- vant UI 框架 <https://vant-ui.github.io/vant/#/zh-CN/quickstart>
 - axios 网络请求（暂无后台）
 - indexDB 本地存储数据库
 - cordova 跨平台打包
