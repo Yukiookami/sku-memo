@@ -9,7 +9,10 @@
   <div class="sku-task-item">
     <!-- checkbox任务主体 -->
     <!-- 当长按屏幕滑动的时候触发内容滑动而不是单任务滑动 -->
-    <van-swipe-cell :disabled="store.isTouchForContextMove">
+    <van-swipe-cell
+      :disabled="store.isTouchForContextMove ?? false"
+      :before-close="handleBeforeClose"
+    >
       <nut-checkbox
         @change="handleChange"
         v-model="state.usedTaskStatus"
@@ -47,6 +50,18 @@
       </template>
     </van-swipe-cell>
     <!-- checkbox任务主题 -->
+
+    <!-- 删除确认框 -->
+    <van-dialog
+      v-model:show="state.showDelDialog"
+      title="删除任务"
+      message="确定要删除该任务吗？"
+      showCancelButton
+      confirmButtonText="确定"
+      cancelButtonText="取消"
+      @confirm="handleDelTask"
+    ></van-dialog>
+    <!-- 删除确认框end -->
   </div>
   <!-- 单个任务end -->
 </template>
@@ -80,7 +95,10 @@ const props = defineProps({
 const emit = defineEmits(["taskChange"]);
 
 const state = reactive({
+  // 确认是否完成任务
   usedTaskStatus: props.taskStatus === TaskStatus["已完成"],
+  // 是否显示删除确认框
+  showDelDialog: false,
 });
 
 /**
@@ -97,9 +115,16 @@ const handleChange = (e) => {
 };
 
 /**
- *  删除任务
+ *  打开删除框
  */
 const handleClickDel = () => {
+  state.showDelDialog = true;
+};
+
+/**
+ * 确认删除任务
+ */
+const handleDelTask = () => {
   // store.delTask(props.taskId);
 };
 
@@ -108,6 +133,19 @@ const handleClickDel = () => {
  */
 const handleClickEdit = () => {
   // store.editTask(props.taskId);
+};
+
+/**
+ * 关闭前的操作, 如果点击的是删除按钮则阻止关闭
+ * @param action
+ * @param done
+ */
+const handleBeforeClose = () => {
+  if (state.showDelDialog) {
+    return false;
+  } else {
+    return true;
+  }
 };
 
 onBeforeMount(() => {

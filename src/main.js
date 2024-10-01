@@ -34,9 +34,10 @@ import {
 import "@nutui/nutui/dist/style.css";
 // nutUI end
 // vant
-// 滑动单元格
-import { SwipeCell } from "vant";
-import 'vant/lib/index.css';
+// 滑动单元格, 弹出框
+import { SwipeCell, Dialog } from "vant";
+// 引入样式
+import "vant/lib/index.css";
 // vant end
 
 import App from "./App.vue";
@@ -72,6 +73,8 @@ app.use(Picker);
 // 挂载vant
 // 挂载滑动单元格
 app.use(SwipeCell);
+// 挂载弹出框
+app.use(Dialog);
 // vant end
 
 // 挂载应用实例

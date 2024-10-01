@@ -3,10 +3,10 @@
     class="sku-context-swipe"
     ref="swipeContainer"
     @touchstart="onTouchStart"
-    @touchmove="onTouchMove"
+    @touchmove.passive="onTouchMove"
     @touchend="onTouchEnd"
     @mousedown="onTouchStart"
-    @mousemove="onTouchMove"
+    @mousemove.passive="onTouchMove"
     @mouseup="onTouchEnd"
   >
     <!-- 左侧内容 -->
