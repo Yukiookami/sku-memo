@@ -20,7 +20,10 @@
     </template>
   </sku-context-swipe>
 
-  <sku-add-task @submit="handleAddTaskSubmit" />
+  <sku-add-task
+    @submit="handleAddTaskSubmit"
+    @editSubmit="handleEditTaskSubmit"
+  />
 </template>
 
 <script setup>
@@ -79,6 +82,16 @@ const handleTaskChange = (e) => {
  */
 const handleAddTaskSubmit = async (e) => {
   await httpTaskAdd(e, state.nowUseDBName);
+
+  getAllTaskList(state.nowUseDBName);
+};
+
+/**
+ * 编辑任务
+ * @param e 任务对象
+ */
+const handleEditTaskSubmit = async (e) => {
+  await updateTaskList(e, state.nowUseDBName);
 
   getAllTaskList(state.nowUseDBName);
 };

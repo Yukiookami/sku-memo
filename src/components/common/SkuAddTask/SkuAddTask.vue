@@ -42,8 +42,12 @@
         <!-- 右侧区域 -->
         <div class="right-sec">
           <!--添加任务  -->
-          <nut-button type="info" @click="handleSubmit" size="small">
-            添加
+          <nut-button
+            :type="state.buttonType"
+            @click="state.handleClick"
+            size="small"
+          >
+            {{ state.buttonText }}
           </nut-button>
         </div>
         <!-- 右侧区域end -->
@@ -73,13 +77,15 @@
 <script setup>
 import SkuIcon from "../../ui/SkuIcon.vue";
 import add from "../../../assets/images/skuAddTask/添加.svg";
-import { onBeforeMount, reactive } from "vue";
+import { computed, onBeforeMount, reactive, watch } from "vue";
 import { ref } from "vue";
 import { TaskPriority, TaskStatus } from "../../../assets/data/status";
 import { convertEnumToArray } from "../../../utils";
+import { useStore } from "../../../stores";
 
+const store = useStore();
 // 提交事件
-const emit = defineEmits(["submit"]);
+const emit = defineEmits(["submit", "editSubmit"]);
 
 // 是否显示添加任务面板
 const show = ref(false);
@@ -92,6 +98,14 @@ const state = reactive({
   taskName: "",
   // 任务优先级
   taskPriority: TaskPriority["无优先级"],
+  // 是否为编辑
+  isEdit: false,
+  // 按钮文字
+  buttonText: computed(() => (state.isEdit ? "修改" : "添加")),
+  // 按钮类型
+  buttonType: computed(() => (state.isEdit ? "success" : "info")),
+  // 点击按钮触发的函数
+  handleClick: computed(() => (state.isEdit ? handleEditSubmit : handleSubmit)),
 });
 
 // 优先级选择框数据
@@ -102,6 +116,18 @@ const priorityState = reactive({
   current: TaskPriority["无优先级"],
   // 选中的优先级
   selectedPriority: [TaskPriority["无优先级"]],
+});
+
+// 编辑数据
+const editData = reactive({
+  // 任务名称
+  taskName: "",
+  // 任务优先级
+  taskPriority: "",
+  // 任务状态
+  taskStatus: "",
+  // 任务id
+  taskId: "",
 });
 
 /**
@@ -151,6 +177,26 @@ const handleSubmit = () => {
   showPriority.value = false;
 };
 
+/**
+ * 确认编辑
+ */
+const handleEditSubmit = () => {
+  emit("editSubmit", {
+    taskName: state.taskName,
+    taskStatus: editData.taskStatus,
+    taskPriority: state.taskPriority ?? TaskPriority["无优先级"],
+    taskId: editData.taskId,
+  });
+  state.taskName = "";
+  show.value = false;
+  showPriority.value = false;
+
+  // 重置编辑数据
+  for (const key in editData) {
+    editData[key] = "";
+  }
+};
+
 onBeforeMount(() => {
   // 获取优先级选项
   priorityState.columns = convertEnumToArray(TaskPriority).map((item) => {
@@ -160,6 +206,25 @@ onBeforeMount(() => {
     };
   });
 });
+
+// 编辑数据变动是否是编辑模式
+watch(
+  () => store.editTaskDataForSkuAddTask,
+  (newVal) => {
+    console.log(!newVal);
+    if (!newVal) {
+      return;
+    }
+    for (const key in newVal) {
+      editData[key] = newVal[key];
+    }
+
+    state.taskName = editData.taskName;
+    state.taskPriority = editData.taskPriority;
+    state.isEdit = true;
+    show.value = true;
+  }
+);
 </script>
 
 <style lang="scss" scoped>

@@ -13,8 +13,6 @@ export const useStore = defineStore({
     activeIndexInSidebar: Sidebar["生活"],
     // 是否触发左右内容滑动
     isTouchForContextMove: false,
-    // 是否开启编辑状态
-    isEdit: false,
     // 需要编辑的数据（SkuAddTask）
     editTaskDataForSkuAddTask: {},
   }),
@@ -35,10 +33,6 @@ export const useStore = defineStore({
     // 设置是否触发左右内容滑动
     setIsTouchForContextMove(isMove) {
       this.isTouchForContextMove = isMove;
-    },
-    // 设置是否开启编辑状态
-    setIsEdit(isEdit) {
-      this.isEdit = isEdit;
     },
     // 设置需要编辑的数据（SkuAddTask）
     setEditTaskDataForSkuAddTask(data) {

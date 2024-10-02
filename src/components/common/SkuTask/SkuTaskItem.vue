@@ -104,9 +104,8 @@ const state = reactive({
 const handleChange = (e) => {
   state.usedTaskStatus = e;
   emit("taskChange", {
-    taskId: props.taskId,
+    ...props,
     taskStatus: e ? TaskStatus["已完成"] : TaskStatus["未完成"],
-    taskName: props.taskName,
   });
 };
 
@@ -118,7 +117,11 @@ const handleChange = (e) => {
 const handleBeforeClose = ({ position }) => {
   const callFunc = {
     [CloseCellType["编辑"]]: () => {
-      console.log("点击了编辑");
+      store.setEditTaskDataForSkuAddTask({
+        ...props,
+      });
+
+      return true;
     },
     [CloseCellType["删除"]]: async () => {
       try {
@@ -134,10 +137,7 @@ const handleBeforeClose = ({ position }) => {
         if (confirmDel) {
           emit("taskChange", {
             ...props,
-            taskPriority: props.taskPriority,
-            taskId: props.taskId,
             taskStatus: TaskStatus["已删除"],
-            taskName: props.taskName,
           });
         }
 
@@ -156,9 +156,7 @@ const handleBeforeClose = ({ position }) => {
     },
   };
 
-  callFunc[position]();
-
-  console.log(position);
+  return callFunc[position]();
 };
 
 onBeforeMount(() => {
