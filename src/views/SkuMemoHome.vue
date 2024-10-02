@@ -34,7 +34,12 @@ import {
   httpTaskChange,
   httpTaskGetAll,
 } from "../mockApiForIndexDB/task";
-import { ApiType, sortType, TaskPriority } from "../assets/data/status";
+import {
+  ApiType,
+  sortType,
+  TaskPriority,
+  TaskStatus,
+} from "../assets/data/status";
 
 // Pinia store
 const store = useStore();
@@ -44,11 +49,11 @@ const state = reactive({
   taskList: [],
   // 未完成任务列表
   todoList: computed(() =>
-    state.taskList.filter((item) => item.taskStatus === "00")
+    state.taskList.filter((item) => item.taskStatus === TaskStatus["未完成"])
   ),
   // 已完成任务列表
   doneList: computed(() =>
-    state.taskList.filter((item) => item.taskStatus === "01")
+    state.taskList.filter((item) => item.taskStatus === TaskStatus["已完成"])
   ),
   // 当前使用的DB
   nowUseDBName: ApiType[store.activeIndexInSidebar],
@@ -104,8 +109,10 @@ const getAllTaskList = async (dbName) => {
  */
 const updateTaskList = async (e) => {
   const updateObj = {
+    ...e,
     taskStatus: e.taskStatus,
     taskName: e.taskName,
+    taskPriority: e.taskPriority ?? TaskPriority["无优先级"],
   };
   await httpTaskChange(e.taskId, updateObj, state.nowUseDBName);
 };

@@ -67,6 +67,7 @@ import {
   TaskStatus,
 } from "../../../assets/data/status";
 import { useStore } from "../../../stores";
+import { showConfirmDialog } from "vant";
 
 const store = useStore();
 
@@ -119,14 +120,39 @@ const handleBeforeClose = ({ position }) => {
     [CloseCellType["编辑"]]: () => {
       console.log("点击了编辑");
     },
-    [CloseCellType["删除"]]: () => {
-      console.log("点击了删除");
+    [CloseCellType["删除"]]: async () => {
+      try {
+        const res = await showConfirmDialog({
+          title: "删除任务",
+          message: "确定删除该任务吗?",
+          closeOnClickOverlay: true,
+        });
+
+        let confirmDel = res === "confirm";
+
+        // 如果确认删除则触发任务变动事件
+        if (confirmDel) {
+          emit("taskChange", {
+            ...props,
+            taskPriority: props.taskPriority,
+            taskId: props.taskId,
+            taskStatus: TaskStatus["已删除"],
+            taskName: props.taskName,
+          });
+        }
+
+        return confirmDel;
+      } catch {
+        return false;
+      }
     },
+    // 主体点击关闭
     [CloseCellType["主体"]]: () => {
-      console.log("点击了主体");
+      return true;
     },
+    // 外部点击不关闭
     [CloseCellType["外部"]]: () => {
-      console.log("点击了外部");
+      return false;
     },
   };
 
