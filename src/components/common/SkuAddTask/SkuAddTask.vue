@@ -195,6 +195,7 @@ const handleEditSubmit = () => {
   for (const key in editData) {
     editData[key] = "";
   }
+  state.isEdit = false;
 };
 
 onBeforeMount(() => {
