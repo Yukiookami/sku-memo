@@ -17,6 +17,9 @@ import { createPinia } from "pinia";
 import "./utils/viewport"; // 引入 viewport.js
 // 引入字体图标
 import "./assets/font/iconfont/style.css";
+// 自定义指令
+// 长按
+import longPress from "./directives/longPress";
 
 // nutUI
 // 图标
@@ -53,6 +56,9 @@ const pinia = createPinia();
 app.use(router);
 // 挂载Pinia
 app.use(pinia);
+// 挂载自定义指令
+// 长按
+app.directive("long-press", longPress);
 
 // 挂载nutUI
 // 挂载图标

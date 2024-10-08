@@ -56,3 +56,34 @@ export const convertEnumToArray = (enumObj) => {
 
   return result;
 };
+
+/**
+ * @description: 创建一个节流函数
+ * @param {Function} func 需要节流的函数
+ * @param {Number} wait 等待时间，单位为毫秒
+ * @return {Function} 返回一个节流后的函数
+ */
+export const throttle = (func, wait) => {
+  let timeout = null;
+  let previous = 0;
+
+  return function (...args) {
+    const now = Date.now();
+    const remaining = wait - (now - previous);
+
+    if (remaining <= 0 || remaining > wait) {
+      if (timeout) {
+        clearTimeout(timeout);
+        timeout = null;
+      }
+      previous = now;
+      func.apply(this, args);
+    } else if (!timeout) {
+      timeout = setTimeout(() => {
+        previous = Date.now();
+        timeout = null;
+        func.apply(this, args);
+      }, remaining);
+    }
+  };
+};

@@ -8,6 +8,7 @@
     @mousedown="onTouchStart"
     @mousemove.passive="onTouchMove"
     @mouseup="onTouchEnd"
+    v-long-press="{ duration: longPressTime, onLongPress, onLongPressEnd }"
   >
     <!-- 左侧内容 -->
     <div class="context-swipe-left-context">
@@ -46,7 +47,17 @@ let longPressTimer = null;
 // 是否允许滑动
 let allowSwipe = false;
 // 长按时间
-const longPressTime = 500; // 可以根据需要调整此值
+const longPressTime = 300; // 可以根据需要调整此值
+
+const onLongPress = () => {
+  allowSwipe = true;
+  store.setIsTouchForContextMove(true); // 设置 store 中的是否内容滑动状态为 true
+};
+
+const onLongPressEnd = () => {
+  allowSwipe = false;
+  store.setIsTouchForContextMove(false); // 设置 store 中的是否内容滑动状态为 true
+};
 
 /**
  * 设置滑动到左侧
@@ -74,12 +85,6 @@ const onTouchStart = (event) => {
   isSwiping = true;
   hasSwiped = false; // 重置滑动标志
   allowSwipe = false; // 重置允许滑动标志
-
-  // 设置长按定时器
-  longPressTimer = setTimeout(() => {
-    allowSwipe = true; // 1.5秒后允许滑动
-    store.setIsTouchForContextMove(true); // 设置 store 中的是否内容滑动状态为 true
-  }, longPressTime);
 };
 
 /**
