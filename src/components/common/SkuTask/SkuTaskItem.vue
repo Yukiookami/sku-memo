@@ -175,6 +175,7 @@ $button-radius: 5px;
 .sku-task-item {
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
   border-radius: $button-radius;
+  user-select: none;
 
   .sku-task-checkbox {
     position: relative;
