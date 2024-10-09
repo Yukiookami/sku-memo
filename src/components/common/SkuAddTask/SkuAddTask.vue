@@ -19,6 +19,7 @@
   >
     <div class="add-task-sec">
       <nut-input
+        :class="`sku-priority-${state.taskPriority}`"
         v-model="state.taskName"
         placeholder="请输入任务名称"
         clearable
@@ -212,7 +213,6 @@ onBeforeMount(() => {
 watch(
   () => store.editTaskDataForSkuAddTask,
   (newVal) => {
-    console.log(!newVal);
     if (!newVal) {
       return;
     }
@@ -222,6 +222,7 @@ watch(
 
     state.taskName = editData.taskName;
     state.taskPriority = editData.taskPriority;
+    priorityState.selectedPriority = [editData.taskPriority];
     state.isEdit = true;
     show.value = true;
   }
@@ -233,6 +234,7 @@ watch(
 .sku-add-icon {
   $icon-size: 40px;
 
+  user-select: none;
   position: fixed;
   right: 15px;
   bottom: calc($footer-height + 15px);
