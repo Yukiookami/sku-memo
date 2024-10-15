@@ -19,8 +19,10 @@
   >
     <div class="add-task-sec">
       <nut-input
-        :class="`sku-priority-${state.taskPriority}`"
-        v-model="state.taskName"
+        :class="`sku-priority-${
+          priorityState.selectedPriority?.[0] || task.taskPriority
+        }`"
+        v-model="task.taskName"
         placeholder="请输入任务名称"
         clearable
         @keypress.enter="handleSubmit"
@@ -31,11 +33,11 @@
           <div
             class="task-priority"
             @click="handleClickTaskPriority"
-            :class="`sku-priority-${state.taskPriority}`"
+            :class="`sku-priority-${task.taskPriority}`"
           >
             <i class="icon-priority"></i>
 
-            <span>{{ TaskPriority[state.taskPriority] }}</span>
+            <span>{{ TaskPriority[task.taskPriority] }}</span>
           </div>
         </div>
         <!-- 左侧区域end -->
@@ -95,10 +97,6 @@ const showPriority = ref(false);
 
 // 状态
 const state = reactive({
-  // 任务名称
-  taskName: "",
-  // 任务优先级
-  taskPriority: TaskPriority["无优先级"],
   // 是否为编辑
   isEdit: false,
   // 按钮文字
@@ -107,6 +105,14 @@ const state = reactive({
   buttonType: computed(() => (state.isEdit ? "success" : "info")),
   // 点击按钮触发的函数
   handleClick: computed(() => (state.isEdit ? handleEditSubmit : handleSubmit)),
+});
+
+// 任务数据
+const task = reactive({
+  // 任务名称
+  taskName: "",
+  // 任务优先级
+  taskPriority: TaskPriority["无优先级"],
 });
 
 // 优先级选择框数据
@@ -136,6 +142,13 @@ const editData = reactive({
  */
 const handleClickAddIcon = () => {
   show.value = true;
+
+  // 编辑模式下，点击添加按钮，清空数据，并设置为非编辑模式
+  if (state.isEdit) {
+    state.isEdit = false;
+    // 清空数据
+    clearData();
+  }
 };
 
 /**
@@ -150,7 +163,7 @@ const handleClickTaskPriority = () => {
  * @param {Array} values
  */
 const handleConfirmPriority = ({ selectedOptions }) => {
-  state.taskPriority = selectedOptions[0].value;
+  task.taskPriority = selectedOptions[0].value;
   priorityState.current = selectedOptions[0].text;
   priorityState.selectedPriority = [selectedOptions[0].value];
   showPriority.value = false;
@@ -169,13 +182,16 @@ const handleChangePriority = ({ selectedOptions }) => {
  */
 const handleSubmit = () => {
   emit("submit", {
-    taskName: state.taskName,
+    taskName: task.taskName,
     taskStatus: TaskStatus["未完成"],
-    taskPriority: state.taskPriority ?? TaskPriority["无优先级"],
+    taskPriority: task.taskPriority ?? TaskPriority["无优先级"],
   });
-  state.taskName = "";
+  task.taskName = "";
   show.value = false;
   showPriority.value = false;
+
+  // 清空数据
+  clearData();
 };
 
 /**
@@ -183,19 +199,76 @@ const handleSubmit = () => {
  */
 const handleEditSubmit = () => {
   emit("editSubmit", {
-    taskName: state.taskName,
+    taskName: task.taskName,
     taskStatus: editData.taskStatus,
-    taskPriority: state.taskPriority ?? TaskPriority["无优先级"],
+    taskPriority: task.taskPriority ?? TaskPriority["无优先级"],
     taskId: editData.taskId,
   });
-  state.taskName = "";
+  task.taskName = "";
   show.value = false;
   showPriority.value = false;
 
-  // 重置编辑数据
+  // 清空数据
+  clearData();
+};
+
+/**
+ * 清空数据
+ */
+const clearData = () => {
+  // 清空编辑数据
+  // 编辑数据清空策略
+  const editDataStrategy = {
+    default: () => {
+      return "";
+    },
+  };
+
   for (const key in editData) {
-    editData[key] = "";
+    // 如果策略中不存在对应的键，则使用 default 策略
+    const strategy = editDataStrategy[key] || editDataStrategy.default;
+    editData[key] = strategy();
   }
+
+  // 清空任务数据
+  // 任务数据清空策略
+  const taskStrategy = {
+    taskPriority: () => {
+      return TaskPriority["无优先级"];
+    },
+    default: () => {
+      return "";
+    },
+  };
+
+  for (const key in task) {
+    const strategy = taskStrategy[key] || taskStrategy.default;
+    task[key] = strategy();
+  }
+
+  // 清空优先级数据
+  // 优先级数据清空策略
+  const priorityStateStrategy = {
+    selectedPriority: () => {
+      return [TaskPriority["无优先级"]];
+    },
+    current: () => {
+      return TaskPriority["无优先级"];
+    },
+    columns: () => {
+      return priorityState.columns;
+    },
+    default: () => {
+      return [];
+    },
+  };
+
+  for (const key in priorityState) {
+    const strategy =
+      priorityStateStrategy[key] || priorityStateStrategy.default;
+    priorityState[key] = strategy();
+  }
+
   state.isEdit = false;
 };
 
@@ -220,8 +293,8 @@ watch(
       editData[key] = newVal[key];
     }
 
-    state.taskName = editData.taskName;
-    state.taskPriority = editData.taskPriority;
+    task.taskName = editData.taskName;
+    task.taskPriority = editData.taskPriority;
     priorityState.selectedPriority = [editData.taskPriority];
     state.isEdit = true;
     show.value = true;
@@ -285,7 +358,7 @@ watch(
           display: block;
           font-size: 12px;
           font-weight: bolder;
-          margin-top: -2px;
+          margin-top: -4px;
         }
       }
     }
