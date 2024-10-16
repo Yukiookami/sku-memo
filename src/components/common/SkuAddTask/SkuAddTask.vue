@@ -30,6 +30,7 @@
       <div class="add-task-fun-sec">
         <!-- 左侧区域 -->
         <div class="left-sec">
+          <!-- 优先级 -->
           <div
             class="task-priority"
             @click="handleClickTaskPriority"
@@ -39,6 +40,11 @@
 
             <span>{{ TaskPriority[task.taskPriority] }}</span>
           </div>
+          <!-- 优先级end -->
+
+          <!-- 子任务 -->
+          <div></div>
+          <!-- 子任务end -->
         </div>
         <!-- 左侧区域end -->
 

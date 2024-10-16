@@ -1,9 +1,4 @@
-<!--
- * @Author: zxy
- * @Date: 2024-09-19 21:49:07
- * @LastEditTime: 2024-09-29 17:34:05
- * @FilePath: \MakeMemo\src\components\common\SkuTask\SkuTaskItem.vue
--->
+<!-- 任务组件，作为列表的子组件使用 -->
 <template>
   <!-- 单个任务 -->
   <div class="sku-task-item">

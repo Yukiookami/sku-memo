@@ -1,9 +1,4 @@
-<!--
- * @Author: zxy
- * @Date: 2024-09-20 16:52:44
- * @LastEditTime: 2024-09-29 17:21:58
- * @FilePath: \MakeMemo\src\components\common\SkuTask\SkuTask.vue
--->
+<!-- 任务列表组件, 用于展示任务列表, 主出口 -->
 <template>
   <div class="sku-task">
     <transition-group name="slice" tag="div">
@@ -21,6 +16,7 @@
 </template>
 
 <script setup>
+import { SkuTaskList } from "../../../assets/data/requiedKeys";
 import { checkHasAllProperties } from "../../../utils";
 import SkuTaskItem from "./SkuTaskItem.vue";
 
@@ -30,7 +26,7 @@ const props = defineProps({
     required: true,
     validator: (value) => {
       return value.every((item) => {
-        const requiredKeys = ["id", "taskName", "taskStatus"];
+        const requiredKeys = SkuTaskList;
         return checkHasAllProperties(requiredKeys, item);
       });
     },
