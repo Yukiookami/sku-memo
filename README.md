@@ -2,7 +2,7 @@
 
 ## 版本号
 
-v0.4.0
+v0.4.1
 
 ## 介绍
 
@@ -23,7 +23,6 @@ v0.4.0
 - axios 网络请求（暂无后台）
 - indexDB 本地存储数据库
 - cordova 跨平台打包
-- 字体图标 <https://www.iconfont.cn/>
 - 字体图标转换 <https://icomoon.io/>
 
 ## 项目启动
