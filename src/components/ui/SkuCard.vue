@@ -1,3 +1,9 @@
+<!-- 阴影卡片组件 -->
+<!-- 
+  影响范围： 
+  src\components\common\SkuTask\SkuTaskItem.vue，
+  src\components\common\SkuTask\SkuTaskGruop.vue
+ -->
 <template>
   <div class="sku-card">
     <slot></slot>

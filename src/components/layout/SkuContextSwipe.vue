@@ -1,3 +1,8 @@
+<!-- 左右滑动面板组件 -->
+<!--
+  影响范围；
+  src\views\SkuMemoHome.vue
+-->
 <template>
   <div
     class="sku-context-swipe"

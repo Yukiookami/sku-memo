@@ -21,12 +21,18 @@ import { SkuTaskList } from "../../../assets/data/requiedKeys";
 import { checkHasAllProperties } from "../../../utils";
 // import SkuTaskItem from "./SkuTaskItem.vue";
 import SkuCard from "../../ui/SkuCard.vue";
+import { TaskPriority } from "../../../assets/data/status";
 
 const props = defineProps({
   // 任务组id
   id: {
     type: Number,
     required: true,
+  },
+  // 任务组优先级
+  taskPriority: {
+    type: String,
+    default: TaskPriority["无优先级"],
   },
   // 任务组标题
   title: {

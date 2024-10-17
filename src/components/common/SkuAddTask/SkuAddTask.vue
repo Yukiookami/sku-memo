@@ -1,8 +1,7 @@
-<!--
- * @Author: zxy
- * @Date: 2024-09-23 21:17:36
- * @LastEditTime: 2024-09-29 17:30:15
- * @FilePath: \MakeMemo\src\components\common\SkuAddTask\SkuAddTask.vue
+<!-- 任务追加组件 -->
+<!-- 
+  影响范围：
+  src\views\SkuMemoHome.vue
 -->
 <template>
   <!-- 追加按钮 -->

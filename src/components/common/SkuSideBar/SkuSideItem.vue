@@ -1,3 +1,8 @@
+<!-- 侧边栏子项组件 -->
+<!-- 
+  影响范围：
+  src\components\common\SkuSideBar\SkuSideBar.vue
+-->
 <template>
   <!-- 侧边栏按钮 -->
   <div

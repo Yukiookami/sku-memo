@@ -1,8 +1,7 @@
-<!--
- * @Author: zxy
- * @Date: 2024-09-20 16:52:44
- * @LastEditTime: 2024-09-20 20:44:39
- * @FilePath: \MakeMemo\src\components\layout\SkuHeader.vue
+<!-- Hader组件 -->
+<!-- 
+  影响范围：
+  src\components\layout\SkuMainlayout.vue
 -->
 <template>
   <div class="sku-header">

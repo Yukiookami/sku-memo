@@ -1,4 +1,8 @@
 <!-- 任务列表组件, 用于展示任务列表, 主出口 -->
+<!-- 
+  影响范围：
+  src\views\SkuMemoHome.vue
+-->
 <template>
   <div class="sku-task">
     <transition-group name="slice" tag="div">

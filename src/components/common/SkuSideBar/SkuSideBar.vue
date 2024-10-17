@@ -1,3 +1,8 @@
+<!-- 侧边栏组件 -->
+<!-- 
+  影响范围：src\components\layout\SkuMainlayout.vue
+
+-->
 <template>
   <div class="sku-sidebar">
     <nut-popup

@@ -1,4 +1,9 @@
 <!-- 任务组件，作为列表的子组件使用 -->
+<!-- 
+  影响范围；
+  src\components\common\SkuTask\SkuTask.vue
+  src\components\common\SkuTask\SkuTaskGruop.vue
+-->
 <template>
   <!-- 单个任务 -->
   <div class="sku-task-item">

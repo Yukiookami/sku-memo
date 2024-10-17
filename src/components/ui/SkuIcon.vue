@@ -1,8 +1,8 @@
-<!--
- * @Author: zxy
- * @Date: 2024-09-20 16:52:44
- * @LastEditTime: 2024-09-29 16:41:38
- * @FilePath: \MakeMemo\src\components\ui\SkuIcon.vue
+<!-- 图标组件 -->
+<!-- 
+  影响范围:
+  src\components\common\SkuAddTask\SkuAddTask.vue
+  src\components\common\SkuSideBar\SkuSideItem.vue
 -->
 <template>
   <div class="sku-icon">

@@ -1,3 +1,8 @@
+<!-- 主布局 -->
+<!-- 
+  影响范围:
+  src\views\SkuMemoHome.vue
+-->
 <template>
   <!-- 主布局 -->
   <div class="sku-main-layout">

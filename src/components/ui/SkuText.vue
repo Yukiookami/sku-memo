@@ -1,8 +1,10 @@
-<!--
- * @Author: zxy
- * @Date: 2024-09-19 21:49:07
- * @LastEditTime: 2024-09-20 19:04:28
- * @FilePath: \MakeMemo\src\components\ui\SkuText.vue
+<!-- 特殊文字组件 -->
+<!-- 
+  影响范围: 
+  src\components\common\SkuSideBar\SkuSideBar.vue
+  src\components\common\SkuTask\SkuTaskItem.vue
+  src\components\common\SkuTask\SkuFooter.vue
+  src\components\common\SkuTask\SkuHeader.vue
 -->
 <template>
   <!-- 动态使用类名 -->
