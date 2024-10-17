@@ -4,51 +4,53 @@
   <div class="sku-task-item">
     <!-- checkbox任务主体 -->
     <!-- 当长按屏幕滑动的时候触发内容滑动而不是单任务滑动 -->
-    <van-swipe-cell
-      :disabled="store.isTouchForContextMove ?? false"
-      :before-close="handleBeforeClose"
-    >
-      <nut-checkbox
-        @change="handleChange"
-        v-model="state.usedTaskStatus"
-        class="sku-task-checkbox"
-        :class="`sku-priority-${taskPriority}`"
+    <sku-card>
+      <van-swipe-cell
+        :disabled="store.isTouchForContextMove ?? false"
+        :before-close="handleBeforeClose"
       >
-        <span
-          class="task-name"
-          :class="[
-            { closed: state.usedTaskStatus },
-            `sku-priority-${taskPriority}`,
-          ]"
+        <nut-checkbox
+          @change="handleChange"
+          v-model="state.usedTaskStatus"
+          class="sku-task-checkbox"
+          :class="`sku-priority-${taskPriority}`"
         >
-          {{ props.taskName }}
-        </span>
-        <template #icon>
-          <i class="icon-select"></i>
-        </template>
-        <template #checkedIcon>
-          <i class="icon-selected"></i>
-        </template>
-      </nut-checkbox>
+          <span
+            class="task-name"
+            :class="[
+              { closed: state.usedTaskStatus },
+              `sku-priority-${taskPriority}`,
+            ]"
+          >
+            {{ props.taskName }}
+          </span>
+          <template #icon>
+            <i class="icon-select"></i>
+          </template>
+          <template #checkedIcon>
+            <i class="icon-selected"></i>
+          </template>
+        </nut-checkbox>
 
-      <!-- 左侧按钮区域 -->
-      <template #left>
-        <!-- 功能按钮区域 -->
-        <div class="sku-item-func-sec-left">
-          <nut-button shape="square" type="info"> 编辑 </nut-button>
-        </div>
-      </template>
-      <!-- 左侧按钮区域end -->
+        <!-- 左侧按钮区域 -->
+        <template #left>
+          <!-- 功能按钮区域 -->
+          <div class="sku-item-func-sec-left">
+            <nut-button shape="square" type="info"> 编辑 </nut-button>
+          </div>
+        </template>
+        <!-- 左侧按钮区域end -->
 
-      <!-- 右侧按钮区域 -->
-      <template #right>
-        <!-- 功能按钮区域 -->
-        <div class="sku-item-func-sec-right">
-          <nut-button shape="square" type="danger"> 删除 </nut-button>
-        </div>
-      </template>
-      <!-- 右侧按钮区域end -->
-    </van-swipe-cell>
+        <!-- 右侧按钮区域 -->
+        <template #right>
+          <!-- 功能按钮区域 -->
+          <div class="sku-item-func-sec-right">
+            <nut-button shape="square" type="danger"> 删除 </nut-button>
+          </div>
+        </template>
+        <!-- 右侧按钮区域end -->
+      </van-swipe-cell>
+    </sku-card>
     <!-- checkbox任务主题 -->
   </div>
   <!-- 单个任务end -->
@@ -63,6 +65,7 @@ import {
 } from "../../../assets/data/status";
 import { useStore } from "../../../stores";
 import { showConfirmDialog } from "vant";
+import SkuCard from "../../ui/SkuCard.vue";
 
 const store = useStore();
 
@@ -165,19 +168,12 @@ onBeforeMount(() => {
 </script>
 
 <style lang="scss" scoped>
-$button-radius: 5px;
-
 .sku-task-item {
-  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
-  border-radius: $button-radius;
-  user-select: none;
-
   .sku-task-checkbox {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    padding: 1.5rem 1rem;
     min-height: 16px;
     overflow: hidden;
 
@@ -196,6 +192,7 @@ $button-radius: 5px;
     }
   }
 
+  // 右侧功能区
   .sku-item-func-sec-right {
     height: 100%;
     margin-left: 1px;
@@ -210,6 +207,7 @@ $button-radius: 5px;
     }
   }
 
+  // 左侧功能区
   .sku-item-func-sec-left {
     height: 100%;
     margin-right: 1px;

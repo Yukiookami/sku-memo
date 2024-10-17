@@ -23,7 +23,7 @@
           priorityState.selectedPriority?.[0] || task.taskPriority
         }`"
         v-model="task.taskName"
-        placeholder="请输入任务名称"
+        :placeholder="state.placeholder"
         clearable
         @keypress.enter="handleSubmit"
       />
@@ -122,6 +122,10 @@ const state = reactive({
   buttonType: computed(() => (state.isEdit ? "success" : "info")),
   // 点击按钮触发的函数
   handleClick: computed(() => (state.isEdit ? handleEditSubmit : handleSubmit)),
+  // placeholder提示文字
+  placeholder: computed(() =>
+    task.taskGroup ? "请输入任务组标题" : "请输入任务名称"
+  ),
 });
 
 // 任务数据

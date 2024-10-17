@@ -2,7 +2,7 @@
 
 ## 版本号
 
-v0.4.1
+v0.4.2 追加 SkuCard 组件 转移 SkuTaskItem 组件的阴影样式到 SkuCard 组件
 
 ## 介绍
 

@@ -2,15 +2,23 @@
 <template>
   <div class="sku-task">
     <transition-group name="slice" tag="div">
-      <sku-task-item
-        v-for="item in props.taskList"
-        :key="item.id"
-        :taskName="item.taskName"
-        :taskStatus="item.taskStatus"
-        :taskId="item.id"
-        :taskPriority="item.taskPriority"
-        @taskChange="handleChange"
-      />
+      <template v-for="item in props.taskList" :key="item.id">
+        <sku-task-item
+          v-if="!item.taskGroup"
+          :taskName="item.taskName"
+          :taskStatus="item.taskStatus"
+          :taskId="item.id"
+          :taskPriority="item.taskPriority"
+          @taskChange="handleChange"
+        />
+
+        <sku-task-gruop
+          v-else
+          :id="item.id"
+          :title="item.taskName"
+          :taskList="item.taskGroupList ?? []"
+        ></sku-task-gruop>
+      </template>
     </transition-group>
   </div>
 </template>
@@ -19,6 +27,7 @@
 import { SkuTaskList } from "../../../assets/data/requiedKeys";
 import { checkHasAllProperties } from "../../../utils";
 import SkuTaskItem from "./SkuTaskItem.vue";
+import SkuTaskGruop from "./SkuTaskGruop.vue";
 
 const props = defineProps({
   taskList: {
