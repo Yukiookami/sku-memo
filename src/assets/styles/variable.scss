@@ -18,6 +18,11 @@ $checkbox-size: 1.1rem;
 // src\components\common\SkuTask\SkuTaskGruop.vue
 $button-radius: 5px;
 
+// 产品卡片内边距（因为会影响checkbox的大小，所以单独设置）
+// 影响范围：src\components\common\SkuTask\SkuTaskItem.vue
+// src\components\common\SkuTask\SkuTaskGruop.vue
+$card-padding: 1.5rem 1rem;
+
 // 优先级颜色（符合残障标准，适合白色背景）
 $priority-color: (
   // 优先级1 - 深红色（最高优先级，醒目）

@@ -1,15 +1,8 @@
-<!-- 任务追加组件 -->
+<!-- 添加子任务 -->
 <!-- 
-  影响范围：
-  src\views\SkuMemoHome.vue
+  影响范围：src\views\SkuMemoHome.vue
 -->
 <template>
-  <!-- 追加按钮 -->
-  <div class="sku-add-icon" @click="handleClickAddIcon">
-    <sku-icon height="40px" width="40px" :icon="add" />
-  </div>
-  <!-- 追加按钮end -->
-
   <!-- 追加面板 -->
   <nut-popup
     v-model:visible="show"
@@ -38,20 +31,6 @@
             </div>
           </sku-priority-text>
           <!-- 优先级end -->
-
-          <!-- 子任务 -->
-          <div
-            class="task-group"
-            @click="handleClickMakeGroup"
-            :class="{
-              'task-group-actived': task.taskGroup,
-            }"
-          >
-            <i class="icon-taskGroup"></i>
-
-            <span>创建组</span>
-          </div>
-          <!-- 子任务end -->
         </div>
         <!-- 左侧区域end -->
 
@@ -91,14 +70,11 @@
 </template>
 
 <script setup>
-import SkuIcon from "../../ui/SkuIcon.vue";
-import SkuPriorityText from "../../ui/SkuPriorityText.vue";
-import add from "../../../assets/images/skuAddTask/添加.svg";
-import { computed, onBeforeMount, reactive, watch } from "vue";
-import { ref } from "vue";
-import { TaskPriority, TaskStatus } from "../../../assets/data/status";
-import { convertEnumToArray } from "../../../utils";
+import { reactive, computed, watch, ref, onBeforeMount } from "vue";
 import { useStore } from "../../../stores";
+import { TaskPriority, TaskStatus } from "../../../assets/data/status";
+import SkuPriorityText from "../../ui/SkuPriorityText.vue";
+import { convertEnumToArray } from "../../../utils";
 
 // ================== 定义 ==================
 const store = useStore();
@@ -109,6 +85,8 @@ const emit = defineEmits(["submit", "editSubmit"]);
 const show = ref(false);
 // 是否显示优先级选择框
 const showPriority = ref(false);
+// 父组id
+const parentId = ref("");
 
 // 状态
 const state = reactive({
@@ -121,23 +99,18 @@ const state = reactive({
   // 点击按钮触发的函数
   handleClick: computed(() => (state.isEdit ? handleEditSubmit : handleSubmit)),
   // placeholder提示文字
-  placeholder: computed(() =>
-    task.taskGroup ? "请输入任务组标题" : "请输入任务名称"
-  ),
+  placeholder: computed(() => "请输入任务名称"),
 });
 
 // 任务数据
 // 影响范围：handleSubmit，handleEditSubmit，editData，
 // src\assets\data\requiedKeys.js 中的 SkuTaskList
 // 数据监听中的 editTaskDataForSkuAddTask
-// 与src\components\common\SkuAddTask\SkuAddSubTask.vue中的task数据部分一致（无分组）
 const task = reactive({
   // 任务名称
   taskName: "",
   // 任务优先级
   taskPriority: TaskPriority["无优先级"],
-  // 是否为任务组
-  taskGroup: false,
 });
 
 // 优先级选择框数据
@@ -158,28 +131,12 @@ const editData = reactive({
   taskPriority: "",
   // 任务状态
   taskStatus: "",
-  // 是否为任务组
-  taskGroup: false,
   // 任务id
   taskId: "",
 });
 // ================== 定义end ==================
 
 // ================== 逻辑操作 ==================
-/**
- * 点击添加按钮
- */
-const handleClickAddIcon = () => {
-  show.value = true;
-
-  // 编辑模式下，点击添加按钮，清空数据，并设置为非编辑模式
-  if (state.isEdit) {
-    state.isEdit = false;
-    // 清空数据
-    clearData();
-  }
-};
-
 /**
  * 确认添加
  */
@@ -188,7 +145,8 @@ const handleSubmit = () => {
     taskName: task.taskName,
     taskStatus: TaskStatus["未完成"],
     taskPriority: task.taskPriority ?? TaskPriority["无优先级"],
-    taskGroup: task.taskGroup ?? false,
+    taskGroup: false,
+    parentId: parentId.value,
   });
   task.taskName = "";
   show.value = false;
@@ -206,8 +164,9 @@ const handleEditSubmit = () => {
     taskName: task.taskName,
     taskStatus: editData.taskStatus,
     taskPriority: task.taskPriority ?? TaskPriority["无优先级"],
-    taskGroup: task.taskGroup ?? false,
+    taskGroup: false,
     taskId: editData.taskId,
+    parentId: parentId.value,
   });
   task.taskName = "";
   show.value = false;
@@ -276,6 +235,7 @@ const clearData = () => {
 
   state.isEdit = false;
 };
+
 // ================== 逻辑操作end ==================
 
 // ================== 优先级 ==================
@@ -306,16 +266,6 @@ const handleChangePriority = ({ selectedOptions }) => {
 };
 // ================== 优先级end ==================
 
-// ================== 子任务 ==================
-/**
- * 点击切换创建组的选中状态
- */
-const handleClickMakeGroup = () => {
-  task.taskGroup = !task.taskGroup;
-};
-
-// ================== 子任务end ==================
-
 // ================== 初期渲染 ==================
 onBeforeMount(() => {
   // 获取优先级选项
@@ -329,13 +279,26 @@ onBeforeMount(() => {
 // ================== 初期渲染end ==================
 
 // ================== 数据监听 ==================
-// 编辑数据变动是否是编辑模式
+// 面板展开
 watch(
-  () => store.editTaskDataForSkuAddTask,
+  () => store.isAddSubTask,
   (newVal) => {
-    if (!newVal) {
-      return;
+    if (state.isEdit) {
+      clearData();
+      state.isEdit = false;
     }
+
+    show.value = newVal.isAdd;
+    parentId.value = newVal.parentId;
+  }
+);
+
+// 编辑数据变动是否为编辑模式
+watch(
+  () => store.editSubTaskDataForSkuAddSubTask,
+  (newVal) => {
+    if (!newVal) return;
+
     for (const key in newVal) {
       editData[key] = newVal[key];
     }
@@ -344,6 +307,8 @@ watch(
     task.taskPriority = editData.taskPriority;
     task.taskGroup = editData.taskGroup;
     priorityState.selectedPriority = [editData.taskPriority];
+    parentId.value = newVal.parentId;
+
     state.isEdit = true;
     show.value = true;
   }
@@ -352,26 +317,6 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-// 添加任务按钮，固定在右下角
-.sku-add-icon {
-  $icon-size: 40px;
-
-  user-select: none;
-  position: fixed;
-  right: 15px;
-  bottom: calc($footer-height + 15px);
-  width: $icon-size;
-  height: $icon-size;
-  background-color: #fff;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: all 0.3s;
-  cursor: pointer;
-}
-
 .add-task-sec {
   display: flex;
   flex-direction: column;

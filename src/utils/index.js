@@ -1,9 +1,5 @@
-/*
- * @Author: zxy
- * @Date: 2024-09-19 22:20:08
- * @LastEditTime: 2024-09-29 15:33:03
- * @FilePath: \MakeMemo\src\utils\index.js
- */
+// Description: 通用工具函数
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * @description: 创建枚举对象
@@ -86,4 +82,12 @@ export const throttle = (func, wait) => {
       }, remaining);
     }
   };
+};
+
+/**
+ * @description: 生成唯一uuid
+ * @return {String} 返回一个uuid
+ */
+export const generateUUID = () => {
+  return uuidv4();
 };

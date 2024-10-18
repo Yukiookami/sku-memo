@@ -13,14 +13,19 @@
           :taskStatus="item.taskStatus"
           :taskId="item.id"
           :taskPriority="item.taskPriority"
+          :parentId="null"
           @taskChange="handleChange"
         />
 
         <sku-task-gruop
           v-else
-          :id="item.id"
-          :title="item.taskName"
-          :taskList="item.taskGroupList ?? []"
+          :taskId="item.id"
+          :taskName="item.taskName"
+          :taskStatus="item.taskStatus"
+          :subTasks="item.subTasks ?? []"
+          :taskPriority="item.taskPriority"
+          :parentId="item.id"
+          @taskChange="handleChange"
         ></sku-task-gruop>
       </template>
     </transition-group>
@@ -28,8 +33,8 @@
 </template>
 
 <script setup>
-import { SkuTaskList } from "../../../assets/data/requiedKeys";
-import { checkHasAllProperties } from "../../../utils";
+// import { SkuTaskList } from "../../../assets/data/requiedKeys";
+// import { checkHasAllProperties } from "../../../utils";
 import SkuTaskItem from "./SkuTaskItem.vue";
 import SkuTaskGruop from "./SkuTaskGruop.vue";
 
@@ -37,12 +42,12 @@ const props = defineProps({
   taskList: {
     type: Array,
     required: true,
-    validator: (value) => {
-      return value.every((item) => {
-        const requiredKeys = SkuTaskList;
-        return checkHasAllProperties(requiredKeys, item);
-      });
-    },
+    // validator: (value) => {
+    //   return value.every((item) => {
+    //     const requiredKeys = SkuTaskList;
+    //     return checkHasAllProperties(requiredKeys, item);
+    //   });
+    // },
   },
 });
 

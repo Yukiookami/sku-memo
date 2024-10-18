@@ -15,6 +15,16 @@ export const useStore = defineStore({
     isTouchForContextMove: false,
     // 需要编辑的数据（SkuAddTask）
     editTaskDataForSkuAddTask: {},
+    // 是否显示添加子任务
+    // 影响范围
+    // src\components\common\SkuTask\SkuTaskGruop.vue
+    // src\components\common\SkuAddTask\SkuAddSubTask.vue
+    isAddSubTask: {
+      isAdd: false,
+      parentId: "",
+    },
+    // 需要编辑的子任务数据(SkuAddSubTask)
+    editSubTaskDataForSkuAddSubTask: {},
   }),
   // 定义操作
   actions: {
@@ -37,6 +47,14 @@ export const useStore = defineStore({
     // 设置需要编辑的数据（SkuAddTask）
     setEditTaskDataForSkuAddTask(data) {
       this.editTaskDataForSkuAddTask = data;
+    },
+    // 设置是否显示添加子任务
+    setIsAddSubTask(isAdd) {
+      this.isAddSubTask = isAdd;
+    },
+    // 设置需要编辑的子任务数据(SkuAddSubTask)
+    setEditSubTaskDataForSkuAddSubTask(data) {
+      this.editSubTaskDataForSkuAddSubTask = data;
     },
   },
 });

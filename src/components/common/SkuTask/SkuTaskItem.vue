@@ -10,25 +10,18 @@
     <!-- checkbox任务主体 -->
     <!-- 当长按屏幕滑动的时候触发内容滑动而不是单任务滑动 -->
     <sku-card>
-      <van-swipe-cell
-        :disabled="store.isTouchForContextMove ?? false"
-        :before-close="handleBeforeClose"
-      >
+      <sku-swipe @before-close="handleBeforeClose">
         <nut-checkbox
           @change="handleChange"
           v-model="state.usedTaskStatus"
           class="sku-task-checkbox"
           :class="`sku-priority-${taskPriority}`"
         >
-          <span
-            class="task-name"
-            :class="[
-              { closed: state.usedTaskStatus },
-              `sku-priority-${taskPriority}`,
-            ]"
-          >
-            {{ props.taskName }}
-          </span>
+          <sku-priority-text :priority="taskPriority">
+            <span class="task-name" :class="[{ closed: state.usedTaskStatus }]">
+              {{ props.taskName }}
+            </span>
+          </sku-priority-text>
           <template #icon>
             <i class="icon-select"></i>
           </template>
@@ -40,21 +33,17 @@
         <!-- 左侧按钮区域 -->
         <template #left>
           <!-- 功能按钮区域 -->
-          <div class="sku-item-func-sec-left">
-            <nut-button shape="square" type="info"> 编辑 </nut-button>
-          </div>
+          <nut-button shape="square" type="info"> 编辑 </nut-button>
         </template>
         <!-- 左侧按钮区域end -->
 
         <!-- 右侧按钮区域 -->
         <template #right>
           <!-- 功能按钮区域 -->
-          <div class="sku-item-func-sec-right">
-            <nut-button shape="square" type="danger"> 删除 </nut-button>
-          </div>
+          <nut-button shape="square" type="danger"> 删除 </nut-button>
         </template>
         <!-- 右侧按钮区域end -->
-      </van-swipe-cell>
+      </sku-swipe>
     </sku-card>
     <!-- checkbox任务主题 -->
   </div>
@@ -71,6 +60,8 @@ import {
 import { useStore } from "../../../stores";
 import { showConfirmDialog } from "vant";
 import SkuCard from "../../ui/SkuCard.vue";
+import SkuPriorityText from "../../ui/SkuPriorityText.vue";
+import SkuSwipe from "../../ui/SkuSwipe.vue";
 
 const store = useStore();
 
@@ -84,12 +75,16 @@ const props = defineProps({
     default: TaskStatus["未完成"],
   },
   taskId: {
-    type: Number,
+    type: [Number, String],
     required: true,
   },
   taskPriority: {
     type: String,
     default: TaskPriority["无优先级"],
+  },
+  parentId: {
+    type: Number,
+    default: null,
   },
 });
 
@@ -106,6 +101,7 @@ const state = reactive({
  */
 const handleChange = (e) => {
   state.usedTaskStatus = e;
+  // 通过parentId判断是否为子任务
   emit("taskChange", {
     ...props,
     taskStatus: e ? TaskStatus["已完成"] : TaskStatus["未完成"],
@@ -120,9 +116,16 @@ const handleChange = (e) => {
 const handleBeforeClose = ({ position }) => {
   const callFunc = {
     [CloseCellType["编辑"]]: () => {
-      store.setEditTaskDataForSkuAddTask({
-        ...props,
-      });
+      // 判断是否有parentId，如果有则为修改子任务
+      if (props.parentId !== null) {
+        store.setEditSubTaskDataForSkuAddSubTask({
+          ...props,
+        });
+      } else {
+        store.setEditTaskDataForSkuAddTask({
+          ...props,
+        });
+      }
 
       return true;
     },
@@ -181,6 +184,7 @@ onBeforeMount(() => {
     justify-content: flex-start;
     min-height: 16px;
     overflow: hidden;
+    padding: $card-padding;
 
     .task-name {
       font-size: 1rem;
@@ -194,36 +198,6 @@ onBeforeMount(() => {
     img {
       width: 24px;
       height: 24px;
-    }
-  }
-
-  // 右侧功能区
-  .sku-item-func-sec-right {
-    height: 100%;
-    margin-left: 1px;
-
-    ::v-deep .nut-button--square {
-      height: 100%;
-    }
-
-    ::v-deep .nut-button--square {
-      border-top-right-radius: $button-radius;
-      border-bottom-right-radius: $button-radius;
-    }
-  }
-
-  // 左侧功能区
-  .sku-item-func-sec-left {
-    height: 100%;
-    margin-right: 1px;
-
-    ::v-deep .nut-button--square {
-      height: 100%;
-    }
-
-    ::v-deep .nut-button--square {
-      border-top-left-radius: $button-radius;
-      border-bottom-left-radius: $button-radius;
     }
   }
 }
