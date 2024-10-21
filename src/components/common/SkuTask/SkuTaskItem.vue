@@ -126,8 +126,6 @@ const handleBeforeClose = ({ position }) => {
           ...props,
         });
       }
-
-      return true;
     },
     [CloseCellType["删除"]]: async () => {
       try {
@@ -146,20 +144,14 @@ const handleBeforeClose = ({ position }) => {
             taskStatus: TaskStatus["已删除"],
           });
         }
-
-        return confirmDel;
       } catch {
         return false;
       }
     },
     // 主体点击关闭
-    [CloseCellType["主体"]]: () => {
-      return true;
-    },
-    // 外部点击不关闭
-    [CloseCellType["外部"]]: () => {
-      return false;
-    },
+    [CloseCellType["主体"]]: () => {},
+    // 外部点击关闭
+    [CloseCellType["外部"]]: () => {},
   };
 
   return callFunc[position]();

@@ -39,6 +39,7 @@ const emit = defineEmits(["before-close"]);
  */
 const handleBeforeClose = (action, done) => {
   emit("before-close", action, done);
+  return true;
 };
 </script>
 

@@ -10,7 +10,7 @@
         <div class="sku-task-group-title">
           <sku-priority-text class="title-sec" :priority="taskPriority">
             <!-- 任务组标题 -->
-            <div>
+            <div @click="handleOpenBord">
               <i class="icon-taskGroup"></i>
               <span>
                 {{ taskName }}
@@ -37,16 +37,19 @@
           <nut-button shape="square" type="danger"> 删除 </nut-button>
         </template>
       </sku-swipe>
-      <sku-task-item
-        v-for="item in subTasks"
-        :key="item.taskId"
-        :taskName="item.taskName"
-        :taskStatus="item.taskStatus"
-        :taskId="item.taskId"
-        :taskPriority="item.taskPriority"
-        @taskChange="handleChange"
-        :parentId="parentId"
-      />
+
+      <sku-collapse :open="isOpen">
+        <sku-task-item
+          v-for="item in subTasks"
+          :key="item.taskId"
+          :taskName="item.taskName"
+          :taskStatus="item.taskStatus"
+          :taskId="item.taskId"
+          :taskPriority="item.taskPriority"
+          @taskChange="handleChange"
+          :parentId="parentId"
+        />
+      </sku-collapse>
     </sku-card>
   </div>
 </template>
@@ -55,9 +58,11 @@
 import SkuPriorityText from "../../ui/SkuPriorityText.vue";
 import SkuText from "../../ui/SkuText.vue";
 import SkuSwipe from "../../ui/SkuSwipe.vue";
+import SkuCollapse from "../../ui/SkuCollapse.vue";
 import { showConfirmDialog } from "vant";
 import SkuTaskItem from "./SkuTaskItem.vue";
 import SkuCard from "../../ui/SkuCard.vue";
+import { throttle } from "lodash";
 import {
   TaskPriority,
   CloseCellType,
@@ -66,9 +71,11 @@ import {
   TextType,
 } from "../../../assets/data/status";
 import { useStore } from "../../../stores";
-import { computed, reactive, toRaw } from "vue";
+import { computed, reactive, toRaw, ref } from "vue";
 
 const store = useStore();
+
+const isOpen = ref(false);
 
 const props = defineProps({
   // 任务组id
@@ -132,8 +139,6 @@ const handleBeforeClose = ({ position }) => {
         parentId: props.taskId,
         isAdd: true,
       });
-
-      return true;
     },
     [CloseCellType["删除"]]: async () => {
       try {
@@ -154,30 +159,39 @@ const handleBeforeClose = ({ position }) => {
             taskStatus: TaskStatus["已删除"],
           });
         }
-
-        return confirmDel;
       } catch {
         return false;
       }
     },
     // 主体点击关闭
-    [CloseCellType["主体"]]: () => {
-      return true;
-    },
-    // 外部点击不关闭
-    [CloseCellType["外部"]]: () => {
-      return false;
-    },
+    [CloseCellType["主体"]]: () => {},
+    // 外部点击关闭
+    [CloseCellType["外部"]]: () => {},
   };
 
   return callFunc[position]();
+};
+
+// 在 setup 中定义一个持久的节流函数
+const throttledToggleOpen = throttle(
+  () => {
+    isOpen.value = !isOpen.value;
+  },
+  300,
+  // 限制只有在 leading edge（即首次触发）时执行
+  { leading: true, trailing: false }
+);
+
+/**
+ * 打开任务组子任务面板
+ */
+const handleOpenBord = () => {
+  throttledToggleOpen();
 };
 </script>
 
 <style lang="scss" scoped>
 .sku-task-group {
-  margin-bottom: 20px;
-
   .sku-task-group-title {
     $border-position: 2%;
 
