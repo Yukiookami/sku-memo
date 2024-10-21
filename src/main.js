@@ -25,7 +25,7 @@ import longPress from "./directives/longPress";
 // 图标
 import { IconFont } from "@nutui/icons-vue";
 import "@nutui/icons-vue/dist/style_iconfont.css";
-// 复选框, 弹出层, 输入框, 按钮, 选择器,
+// 复选框, 弹出层, 输入框, 按钮, 选择器, 徽章
 import {
   CheckboxGroup,
   Checkbox,

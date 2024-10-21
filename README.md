@@ -3,6 +3,7 @@
 ## 版本号
 
 V0.5.0 追加任务组功能，引入 UUID 作为子任务的唯一 ID
+引入工具函数库 lodash
 
 - 剩余：子任务的删除、修改
 - 父任务的收起展开
@@ -16,9 +17,7 @@ v0.4.2 追加 SkuCard 组件 转移 SkuTaskItem 组件的阴影样式到 SkuCard
 
 这是一个自用的备忘录手机 APP 小软件，主要功能有：
 
-- todoLit
-- 日程安排
-- 笔记记录
+- todoList
 
 ## 技术栈
 
@@ -32,6 +31,7 @@ v0.4.2 追加 SkuCard 组件 转移 SkuTaskItem 组件的阴影样式到 SkuCard
 - indexDB 本地存储数据库
 - cordova 跨平台打包
 - 字体图标转换 <https://icomoon.io/>
+- 工具函数库 lodash
 
 ## 项目启动
 

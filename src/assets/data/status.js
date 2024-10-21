@@ -44,6 +44,8 @@ export const TextFont = createEnum({
   chineseFont: "默认",
   // header标题字体
   headerTitleFont: "header标题字体",
+  // 数字字体
+  numberFont: "数字字体",
 });
 // ==================================================
 // SkuText组件使用 end
@@ -60,10 +62,6 @@ export const TaskStatus = createEnum({
   "01": "已完成",
   // 已删除
   "02": "已删除",
-  // 进行中
-  "03": "进行中",
-  // 已暂停
-  "04": "已暂停",
 });
 
 // 关闭滑动单元格的类型（vant）

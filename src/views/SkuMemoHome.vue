@@ -44,6 +44,7 @@ import {
   TaskStatus,
 } from "../assets/data/status";
 import { generateUUID } from "../utils";
+import _ from "lodash";
 
 // Pinia store
 const store = useStore();
@@ -68,17 +69,19 @@ const state = reactive({
  * @returns 未完成任务列表
  */
 const filterToDoTask = (taskList) => {
-  return taskList.filter((task) => {
-    // 如果是任务组，并且组内有未完成的任务
+  const deepData = _.cloneDeep(taskList);
+  return deepData.filter((task) => {
+    // 如果是任务组
     if (
       task.taskGroup &&
       task.subTasks?.length > 0 &&
       task.taskStatus !== TaskStatus["已删除"]
     ) {
-      const hasIncompleteSubTask = task.subTasks.some(
+      // 显示组中状态是未完成的任务
+      task.subTasks = task.subTasks.filter(
         (subTask) => subTask.taskStatus === TaskStatus["未完成"]
       );
-      return hasIncompleteSubTask;
+      return true;
     }
 
     // 如果不是任务组或没有子任务，直接判断任务状态
@@ -92,17 +95,21 @@ const filterToDoTask = (taskList) => {
  * @returns 已完成任务列表
  */
 const filterDoneTask = (taskList) => {
-  return taskList.filter((task) => {
+  const deepData = _.cloneDeep(taskList);
+  return deepData.filter((task) => {
     // 如果是任务组，并且组内所有子任务都已完成
     if (
       task.taskGroup &&
       task.subTasks?.length > 0 &&
       task.taskStatus !== TaskStatus["已删除"]
     ) {
-      const allSubTasksCompleted = task.subTasks.every(
+      // 显示组中状态是已完成的任务
+      task.subTasks = task.subTasks.filter(
         (subTask) => subTask.taskStatus === TaskStatus["已完成"]
       );
-      return allSubTasksCompleted;
+
+      console.log("task.subTasks", task.subTasks);
+      return true;
     }
 
     // 如果不是任务组或没有子任务，直接判断任务状态
@@ -110,6 +117,40 @@ const filterDoneTask = (taskList) => {
   });
 };
 // ================== 逻辑控制end ==================
+
+// ================== 装饰器 ==================
+/**
+ * 获取数据装饰器
+ * @param shouldReload 是否重新获取数据
+ */
+const getDataDecoratorWithParam = (shouldReload) => {
+  // 返回一个装饰器函数
+  return (func) => {
+    return async (...args) => {
+      await func(...args);
+
+      console.log("shouldReload", shouldReload);
+      // 根据参数决定是否重新获取数据
+      if (shouldReload) {
+        getAllTaskList(state.nowUseDBName);
+      }
+    };
+  };
+};
+// ================== 装饰器end ==================
+
+// ================== 装饰器工厂 ==================、
+// 添加任务
+const addTaskWithReload = getDataDecoratorWithParam(true);
+// 编辑任务
+const editTaskWithReload = getDataDecoratorWithParam(true);
+// 添加子任务
+const addSubWithReload = getDataDecoratorWithParam(true);
+// 编辑子任务
+const editSubWithReload = getDataDecoratorWithParam(true);
+// 任务状态更改（仅限单任务和任务组标题）
+const taskChangeWithReload = getDataDecoratorWithParam(true);
+// ================== 装饰器工厂end ==================
 
 // ================== 基础增删改查 ==================
 /**
@@ -126,7 +167,7 @@ const updateTaskList = async (e) => {
     subTasks: e.subTasks ?? [],
   };
 
-  await httpTaskChange(e.taskId, updateObj, state.nowUseDBName);
+  await httpTaskChange(e.taskId ?? e.id, updateObj, state.nowUseDBName);
 };
 
 /**
@@ -165,9 +206,10 @@ const handleTaskChange = (e) => {
   } else {
     // 组和单独的任务都走这里
     const index = state.taskList.findIndex((item) => item.id === taskId);
-    state.taskList[index].taskStatus = taskStatus;
+    const updatedTask = _.cloneDeep(state.taskList[index]);
+    updatedTask.taskStatus = taskStatus;
 
-    updateTaskList(e);
+    taskChangeWithReload(updateTaskList)(updatedTask);
   }
 };
 // ================== 单任务/子任务共通end ==================
@@ -177,21 +219,17 @@ const handleTaskChange = (e) => {
  * 添加任务
  * @param e 任务对象
  */
-const handleAddTaskSubmit = async (e) => {
+const handleAddTaskSubmit = addTaskWithReload(async (e) => {
   await httpTaskAdd(e, state.nowUseDBName);
-
-  getAllTaskList(state.nowUseDBName);
-};
+});
 
 /**
  * 编辑任务
  * @param e 任务对象
  */
-const handleEditTaskSubmit = async (e) => {
+const handleEditTaskSubmit = editTaskWithReload(async (e) => {
   await updateTaskList(e);
-
-  getAllTaskList(state.nowUseDBName);
-};
+});
 // ================== 单任务追加end ==================
 
 // ================== 子任务追加 ==================
@@ -199,38 +237,50 @@ const handleEditTaskSubmit = async (e) => {
  * 添加子任务
  * @param e 任务对象
  */
-const handleAddSubTaskSubmit = async (e) => {
+const handleAddSubTaskSubmit = addSubWithReload(async (e) => {
   const { parentId } = e;
-  const parentTask = state.taskList.find((item) => item.id === parentId);
-  parentTask.subTasks ?? (parentTask.subTasks = []);
+  const parentTaskIndex = state.taskList.findIndex(
+    (item) => item.id === parentId
+  );
 
-  // 因为不是真正的数据库，所以这里需要手动添加taskId
-  e.taskId = generateUUID();
-  parentTask.subTasks.push(e);
-  parentTask.taskId = parentId;
+  if (parentTaskIndex !== -1) {
+    // 获取原始对象
+    const parentTask = _.cloneDeep(state.taskList[parentTaskIndex]);
 
-  await updateTaskList(toRaw(parentTask));
-  getAllTaskList(state.nowUseDBName);
-};
+    // 创建非响应式副本并修改
+    const updatedTask = {
+      ...parentTask,
+      subTasks: [
+        ...(parentTask.subTasks ?? []),
+        { ...e, taskId: generateUUID() },
+      ],
+    };
+
+    // 更新任务列表
+    await updateTaskList(updatedTask);
+  }
+});
 
 /**
  * 编辑子任务
  * @param e 任务对象
  */
-const handleEditSubTaskSubmit = async (e) => {
+const handleEditSubTaskSubmit = editSubWithReload(async (e) => {
   const { parentId } = e;
-  const parentTask = state.taskList.find((item) => item.id === parentId);
+  const parentTask = _.cloneDeep(
+    state.taskList.find((item) => item.id === parentId)
+  );
 
   parentTask.subTasks =
     parentTask.subTasks?.map((item) => {
       if (item.taskId === e.taskId) {
         return e;
       }
-      return item;
+      return toRaw(item);
     }) ?? [];
 
   await updateTaskList(toRaw(parentTask));
-};
+});
 // ================== 子任务追加end ==================
 
 // ================== 数据监听 ==================

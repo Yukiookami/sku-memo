@@ -1,14 +1,31 @@
 <!-- 任务列表组件，用于展示子任务 -->
+<!-- 
+  影响范围: 
+  src\components\common\SkuTask\SkuTask.vue
+-->
 <template>
   <div class="sku-task-group">
     <sku-card>
       <sku-swipe @before-close="handleBeforeClose">
         <div class="sku-task-group-title">
-          <sku-priority-text :priority="taskPriority">
-            <i class="icon-taskGroup"></i>
-            <span>
-              {{ props.taskName }}
-            </span>
+          <sku-priority-text class="title-sec" :priority="taskPriority">
+            <!-- 任务组标题 -->
+            <div>
+              <i class="icon-taskGroup"></i>
+              <span>
+                {{ taskName }}
+              </span>
+            </div>
+
+            <!-- 已完成数量/任务数量 -->
+            <div class="count-box">
+              <sku-text
+                :title="state.todoCount"
+                :fontType="TextFont['数字字体']"
+                :type="TextType['标题3号']"
+              >
+              </sku-text>
+            </div>
           </sku-priority-text>
         </div>
 
@@ -21,14 +38,14 @@
         </template>
       </sku-swipe>
       <sku-task-item
-        v-for="item in props.subTasks"
+        v-for="item in subTasks"
         :key="item.taskId"
         :taskName="item.taskName"
         :taskStatus="item.taskStatus"
         :taskId="item.taskId"
         :taskPriority="item.taskPriority"
         @taskChange="handleChange"
-        :parentId="props.parentId"
+        :parentId="parentId"
       />
     </sku-card>
   </div>
@@ -36,6 +53,7 @@
 
 <script setup>
 import SkuPriorityText from "../../ui/SkuPriorityText.vue";
+import SkuText from "../../ui/SkuText.vue";
 import SkuSwipe from "../../ui/SkuSwipe.vue";
 import { showConfirmDialog } from "vant";
 import SkuTaskItem from "./SkuTaskItem.vue";
@@ -44,9 +62,11 @@ import {
   TaskPriority,
   CloseCellType,
   TaskStatus,
+  TextFont,
+  TextType,
 } from "../../../assets/data/status";
 import { useStore } from "../../../stores";
-import { toRaw } from "vue";
+import { computed, reactive, toRaw } from "vue";
 
 const store = useStore();
 
@@ -80,6 +100,16 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["taskChange"]);
+
+// 状态
+const state = reactive({
+  // 确认未完成的任务数量
+  todoCount: computed(() => {
+    return props.subTasks.filter(
+      (item) => item.taskStatus === TaskStatus["未完成"]
+    ).length;
+  }),
+});
 
 /**
  * 当任务被点击改变状态的时候触发
@@ -146,11 +176,42 @@ const handleBeforeClose = ({ position }) => {
 
 <style lang="scss" scoped>
 .sku-task-group {
-  .sku-task-group-title {
-    padding: $card-padding;
+  margin-bottom: 20px;
 
-    .icon-taskGroup {
-      margin-right: 0.9rem;
+  .sku-task-group-title {
+    $border-position: 2%;
+
+    position: relative;
+    padding: $card-padding;
+    word-break: break-all;
+
+    &:after {
+      content: "";
+      display: block;
+      height: 1px;
+      background-color: #ccc;
+      position: absolute;
+      bottom: 0;
+      left: $border-position;
+      right: $border-position;
+    }
+
+    .title-sec {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .icon-taskGroup {
+        margin-right: 0.9rem;
+      }
+
+      .count-box {
+        font-size: 1.2rem;
+        margin-left: 10px;
+        & :nth-child(2) {
+          margin: 0 0.25rem;
+        }
+      }
     }
   }
 }

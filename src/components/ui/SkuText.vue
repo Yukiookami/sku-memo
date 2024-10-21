@@ -5,6 +5,7 @@
   src\components\common\SkuTask\SkuTaskItem.vue
   src\components\common\SkuTask\SkuFooter.vue
   src\components\common\SkuTask\SkuHeader.vue
+  src\components\common\SkuTask\SkuTaskGruop.vue
 -->
 <template>
   <!-- 动态使用类名 -->
@@ -20,7 +21,7 @@ import { TextFont, TextType } from "../../assets/data/status";
 
 const props = defineProps({
   title: {
-    type: String,
+    type: [String, Number],
     required: true,
   },
   type: {
@@ -86,6 +87,10 @@ const fontClass = `sku-font-type-${props.fontType}`;
 
 .sku-font-type-headerTitleFont {
   font-family: "PermanentMarker-Regular", sans-serif;
+}
+
+.sku-font-type-numberFont {
+  font-family: "number-font", sans-serif;
 }
 
 /* 渐变霓虹效果 */
