@@ -1,3 +1,12 @@
+<!-- 折叠面板 -->
+<!-- 
+  功能:折叠展示
+  可以收起展开，使用max-height属性实现动画效果
+-->
+<!-- 
+  影响范围：
+  src\components\common\SkuTask\SkuTaskGruop.vue
+-->
 <template>
   <div
     class="collapse-panel"

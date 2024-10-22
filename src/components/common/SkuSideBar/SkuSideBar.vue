@@ -1,5 +1,9 @@
 <!-- 侧边栏组件 -->
 <!-- 
+  功能：侧边栏
+  显示侧边菜单
+-->
+<!-- 
   影响范围：src\components\layout\SkuMainlayout.vue
 
 -->

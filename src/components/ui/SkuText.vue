@@ -1,5 +1,8 @@
 <!-- 特殊文字组件 -->
 <!-- 
+  功能: 特殊字体、标题展示组件
+-->
+<!-- 
   影响范围: 
   src\components\common\SkuSideBar\SkuSideBar.vue
   src\components\common\SkuTask\SkuTaskItem.vue

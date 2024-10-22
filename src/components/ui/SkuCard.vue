@@ -1,5 +1,9 @@
 <!-- 阴影卡片组件 -->
 <!-- 
+  功能: 展示容器
+  添加对应卡片样式，支持阴影和卡片边框
+-->
+<!-- 
   影响范围： 
   src\components\common\SkuTask\SkuTaskItem.vue，
   src\components\common\SkuTask\SkuTaskGruop.vue

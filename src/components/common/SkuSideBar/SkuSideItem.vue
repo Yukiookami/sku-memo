@@ -1,5 +1,9 @@
 <!-- 侧边栏子项组件 -->
 <!-- 
+  功能：侧边栏子项组件
+  侧边栏中的每一项
+ -->
+<!-- 
   影响范围：
   src\components\common\SkuSideBar\SkuSideBar.vue
 -->

@@ -1,5 +1,8 @@
 <!-- 图标组件 -->
 <!-- 
+  功能: 展示图标
+-->
+<!-- 
   影响范围:
   src\components\common\SkuAddTask\SkuAddTask.vue
   src\components\common\SkuSideBar\SkuSideItem.vue

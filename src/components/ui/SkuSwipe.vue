@@ -1,5 +1,9 @@
 <!-- 滑块组件 -->
 <!-- 
+功能：左右滑动按钮组件
+可以自定义左右部分，可以通过handleBeforeClose判断点击位置，默认全都关闭
+-->
+<!-- 
   影响范围：
   src\components\common\SkuTask\SkuTaskItem.vue
   src\components\common\SkuTask\SkuTaskGroup.vue

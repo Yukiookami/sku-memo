@@ -1,5 +1,9 @@
 <!-- Hader组件 -->
 <!-- 
+  功能:展示头部信息
+  目前主要是展示标题以及点击展开侧边栏  
+-->
+<!-- 
   影响范围：
   src\components\layout\SkuMainlayout.vue
 -->

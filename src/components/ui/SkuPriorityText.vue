@@ -1,5 +1,8 @@
 <!-- 优先级字体颜色组件 -->
 <!-- 
+  功能: 根据优先级变换颜色
+-->
+<!-- 
 影响范围: 
 src\components\common\SkuAddTask\SkuAddTask.vue
 src\components\common\SkuTask\SkuTaskItem.vue

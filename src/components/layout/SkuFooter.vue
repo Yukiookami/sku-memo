@@ -1,5 +1,9 @@
 <!-- Footer组件 -->
 <!-- 
+  功能: 底部按钮
+  展示底部列表，点击底部按钮触发事件切换滑动面板，与滑动面板是联动的（通过Pinia）
+-->
+<!-- 
   影响范围：
   src\components\layout\SkuMainlayout.vue
 -->
