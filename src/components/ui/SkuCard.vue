@@ -5,19 +5,46 @@
   src\components\common\SkuTask\SkuTaskGruop.vue
  -->
 <template>
-  <div class="sku-card">
+  <div
+    :class="{
+      'child-card': isSub,
+      'sku-card': !isSub,
+    }"
+  >
     <slot></slot>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+defineProps({
+  isSub: {
+    type: Boolean,
+    default: false,
+  },
+});
+</script>
 
 <style lang="scss" scoped>
-.sku-card {
-  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+.sku-card,
+.child-card {
   border-radius: $button-radius;
   user-select: none;
 
   min-height: 16px;
+
+  &.sku-card {
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+  }
+
+  &.child-card {
+    &::after {
+      content: "";
+      display: block;
+      width: 95%;
+      height: 1px;
+      margin: 0 auto;
+      background-color: #ccc;
+    }
+  }
 }
 </style>

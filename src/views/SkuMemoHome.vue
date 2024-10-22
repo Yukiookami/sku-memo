@@ -108,7 +108,6 @@ const filterDoneTask = (taskList) => {
         (subTask) => subTask.taskStatus === TaskStatus["已完成"]
       );
 
-      console.log("task.subTasks", task.subTasks);
       return true;
     }
 
@@ -129,7 +128,6 @@ const getDataDecoratorWithParam = (shouldReload) => {
     return async (...args) => {
       await func(...args);
 
-      console.log("shouldReload", shouldReload);
       // 根据参数决定是否重新获取数据
       if (shouldReload) {
         getAllTaskList(state.nowUseDBName);

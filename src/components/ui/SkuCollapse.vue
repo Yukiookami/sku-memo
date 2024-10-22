@@ -1,12 +1,7 @@
-<!-- 折叠面板容器，具有动态高度和过渡效果 -->
-<!-- 
-  影响范围：
-  src\components\common\SkuTask\SkuTaskGruop.vue
--->
 <template>
   <div
     class="collapse-panel"
-    :style="{ height: panelHeight, transition: 'height 0.3s ease' }"
+    :style="{ maxHeight: panelHeight, transition: 'max-height 0.3s ease' }"
     ref="panelContent"
   >
     <!-- 用于从父组件传递内容的插槽 -->
@@ -15,7 +10,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, onMounted, onBeforeUnmount, nextTick } from "vue";
 
 // 接收组件的 props
 const props = defineProps({
@@ -34,7 +29,8 @@ const panelContent = ref(null);
 const panelHeight = ref("0px");
 
 // 根据面板内容计算面板高度的函数
-const calculateHeight = () => {
+const calculateHeight = async () => {
+  await nextTick();
   if (panelContent.value) {
     panelHeight.value = isOpen.value
       ? `${panelContent.value.scrollHeight}px`
@@ -42,22 +38,45 @@ const calculateHeight = () => {
   }
 };
 
-// 监听 'open' 属性的变化，更新面板高度
+// 监听 open 属性的变化，更新面板高度
 watch(
   () => props.open,
-  (newOpen) => {
+  async (newOpen) => {
+    if (newOpen === isOpen.value) {
+      return;
+    }
     isOpen.value = newOpen;
     calculateHeight();
   },
   { immediate: true }
 );
+
+// 使用 MutationObserver 监听面板内容变化
+let observer;
+
+onMounted(() => {
+  if (panelContent.value) {
+    observer = new MutationObserver(() => {
+      calculateHeight();
+    });
+    observer.observe(panelContent.value, {
+      childList: true,
+      subtree: true,
+    });
+  }
+});
+
+onBeforeUnmount(() => {
+  if (observer) {
+    observer.disconnect();
+  }
+});
 </script>
 
 <style scoped>
 .collapse-panel {
-  border: 1px solid #ddd;
-  border-radius: 4px;
   width: 100%;
   overflow: hidden;
+  max-height: 0;
 }
 </style>

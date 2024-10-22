@@ -9,7 +9,7 @@
   <div class="sku-task-item">
     <!-- checkbox任务主体 -->
     <!-- 当长按屏幕滑动的时候触发内容滑动而不是单任务滑动 -->
-    <sku-card>
+    <sku-card :isSub="!!parentId">
       <sku-swipe @before-close="handleBeforeClose">
         <nut-checkbox
           @change="handleChange"
@@ -101,7 +101,7 @@ const state = reactive({
  */
 const handleChange = (e) => {
   state.usedTaskStatus = e;
-  // 通过parentId判断是否为子任务
+
   emit("taskChange", {
     ...props,
     taskStatus: e ? TaskStatus["已完成"] : TaskStatus["未完成"],

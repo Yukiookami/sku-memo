@@ -7,10 +7,14 @@
   <div class="sku-task-group">
     <sku-card>
       <sku-swipe @before-close="handleBeforeClose">
-        <div class="sku-task-group-title">
+        <div
+          @click="handleOpenBord"
+          class="sku-task-group-title"
+          :class="{ 'open-title': isOpen && subTasks?.length > 0 }"
+        >
           <sku-priority-text class="title-sec" :priority="taskPriority">
             <!-- 任务组标题 -->
-            <div @click="handleOpenBord">
+            <div>
               <i class="icon-taskGroup"></i>
               <span>
                 {{ taskName }}
@@ -38,7 +42,7 @@
         </template>
       </sku-swipe>
 
-      <sku-collapse :open="isOpen">
+      <sku-collapse :open="isOpen" :taskId="taskId">
         <sku-task-item
           v-for="item in subTasks"
           :key="item.taskId"
@@ -205,9 +209,17 @@ const handleOpenBord = () => {
       height: 1px;
       background-color: #ccc;
       position: absolute;
-      bottom: 0;
+      bottom: 6px;
       left: $border-position;
       right: $border-position;
+      transition: all 0.3s;
+      opacity: 0;
+    }
+
+    &.open-title {
+      &:after {
+        opacity: 1;
+      }
     }
 
     .title-sec {
@@ -221,7 +233,8 @@ const handleOpenBord = () => {
 
       .count-box {
         font-size: 1.2rem;
-        margin-left: 10px;
+        text-align: center;
+        min-width: 30px;
         & :nth-child(2) {
           margin: 0 0.25rem;
         }
