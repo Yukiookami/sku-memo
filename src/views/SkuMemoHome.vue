@@ -187,6 +187,17 @@ const getAllTaskList = async (dbName) => {
     b.taskPriority = b.taskPriority ?? TaskPriority["无优先级"];
     return sortStrategies[state.nowSortType](a, b);
   });
+
+  // 子任务同样排序
+  state.taskList.forEach((item) => {
+    if (item.subTasks) {
+      item.subTasks.sort((a, b) => {
+        a.taskPriority = a.taskPriority ?? TaskPriority["无优先级"];
+        b.taskPriority = b.taskPriority ?? TaskPriority["无优先级"];
+        return sortStrategies[state.nowSortType](a, b);
+      });
+    }
+  });
 };
 // ================== 基础增删改查end ==================
 

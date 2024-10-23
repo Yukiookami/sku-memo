@@ -79,7 +79,7 @@ import {
   TextType,
 } from "../../../assets/data/status";
 import { useStore } from "../../../stores";
-import { computed, reactive, toRaw, ref } from "vue";
+import { computed, reactive, toRaw, ref, watch } from "vue";
 
 const store = useStore();
 
@@ -196,12 +196,22 @@ const throttledToggleOpen = throttle(
 const handleOpenBord = () => {
   throttledToggleOpen();
 };
+
+// 监听子任务组长度，有变化则打开任务组
+watch(
+  () => props.subTasks.length,
+  () => {
+    if (props.subTasks.length > 0) {
+      isOpen.value = true;
+    }
+  }
+);
 </script>
 
 <style lang="scss" scoped>
 .sku-task-group {
   .sku-task-group-title {
-    $border-position: 2%;
+    $border-position: 0%;
 
     position: relative;
     padding: $card-padding;
@@ -213,7 +223,7 @@ const handleOpenBord = () => {
       height: 1px;
       background-color: #ccc;
       position: absolute;
-      bottom: 6px;
+      bottom: 0px;
       left: $border-position;
       right: $border-position;
       transition: all 0.3s;
