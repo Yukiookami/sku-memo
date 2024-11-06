@@ -192,6 +192,7 @@ const handleSubmit = () => {
     taskStatus: TaskStatus["未完成"],
     taskPriority: task.taskPriority ?? TaskPriority["无优先级"],
     taskGroup: task.taskGroup ?? false,
+    createTime: new Date().getTime(),
   });
   task.taskName = "";
   show.value = false;
@@ -211,6 +212,8 @@ const handleEditSubmit = () => {
     taskPriority: task.taskPriority ?? TaskPriority["无优先级"],
     taskGroup: task.taskGroup ?? false,
     taskId: editData.taskId,
+    createTime: editData.createTime,
+    updateTime: new Date().getTime(),
   });
   task.taskName = "";
   show.value = false;

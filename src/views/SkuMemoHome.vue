@@ -176,30 +176,57 @@ const getAllTaskList = async (dbName) => {
   const res = await httpTaskGetAll(dbName);
   state.taskList = res.data ?? [];
 
-  const sortStrategies = {
-    [sortType["优先级升序"]]: (a, b) => a.taskPriority - b.taskPriority,
-    [sortType["优先级降序"]]: (a, b) => b.taskPriority - a.taskPriority,
+  // 排序任务列表
+  sortTaskList(state.taskList, state.nowSortType);
+};
+
+// ================== 基础增删改查end ==================
+/**
+ * 排序任务列表
+ */
+const sortTaskList = (taskList, nowSortType) => {
+  // 定义排序策略
+  const compareTasks = (a, b, isAscending) => {
+    // 1. 优先级排序（根据升序或降序）
+    if (a.taskPriority !== b.taskPriority) {
+      return isAscending
+        ? a.taskPriority - b.taskPriority
+        : b.taskPriority - a.taskPriority;
+    }
+
+    // 2. 同优先级情况下，任务组排在最上方
+    if (a.taskGroup && !b.taskGroup) return -1;
+    if (!a.taskGroup && b.taskGroup) return 1;
+
+    // 3. 同优先级、同任务组状态下，按照创建时间排序（新创建的在上）
+    return (
+      (new Date(b.createTime).getTime() || 0) -
+      (new Date(a.createTime).getTime() || 0)
+    );
   };
 
-  // 根据排序方式排序
-  state.taskList.sort((a, b) => {
-    a.taskPriority = a.taskPriority ?? TaskPriority["无优先级"];
-    b.taskPriority = b.taskPriority ?? TaskPriority["无优先级"];
-    return sortStrategies[state.nowSortType](a, b);
-  });
+  const sortTasks = (tasks, nowSortType) => {
+    const isAscending = nowSortType === sortType["优先级升序"];
+    tasks.sort((a, b) => {
+      a.taskPriority = a.taskPriority ?? TaskPriority["无优先级"];
+      b.taskPriority = b.taskPriority ?? TaskPriority["无优先级"];
+      return compareTasks(a, b, isAscending);
+    });
 
-  // 子任务同样排序
-  state.taskList.forEach((item) => {
-    if (item.subTasks) {
-      item.subTasks.sort((a, b) => {
-        a.taskPriority = a.taskPriority ?? TaskPriority["无优先级"];
-        b.taskPriority = b.taskPriority ?? TaskPriority["无优先级"];
-        return sortStrategies[state.nowSortType](a, b);
-      });
-    }
-  });
+    // 对子任务进行递归排序
+    tasks.forEach((item) => {
+      if (item.subTasks) {
+        sortTasks(item.subTasks, nowSortType);
+      }
+    });
+  };
+
+  // 排序主任务列表
+  sortTasks(taskList, nowSortType);
 };
-// ================== 基础增删改查end ==================
+// ================== 排序 ==================
+
+// ================== 排序end ==================
 
 // ================== 单任务/子任务共通 ==================
 /**

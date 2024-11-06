@@ -89,6 +89,14 @@ const props = defineProps({
     type: Number,
     default: null,
   },
+  createTime: {
+    type: Number,
+    default: null,
+  },
+  updateTime: {
+    type: Number,
+    default: null,
+  },
 });
 
 const emit = defineEmits(["taskChange"]);

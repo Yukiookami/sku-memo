@@ -137,6 +137,10 @@ const editData = reactive({
   taskStatus: "",
   // 任务id
   taskId: "",
+  // 创建时间
+  createTime: "",
+  // 更新时间
+  updateTime: "",
 });
 // ================== 定义end ==================
 
@@ -151,6 +155,7 @@ const handleSubmit = () => {
     taskPriority: task.taskPriority ?? TaskPriority["无优先级"],
     taskGroup: false,
     parentId: parentId.value,
+    createTime: new Date().getTime(),
   });
   task.taskName = "";
   show.value = false;
@@ -171,6 +176,8 @@ const handleEditSubmit = () => {
     taskGroup: false,
     taskId: editData.taskId,
     parentId: parentId.value,
+    createTime: editData.createTime,
+    updateTime: new Date().getTime(),
   });
   task.taskName = "";
   show.value = false;

@@ -18,6 +18,8 @@
           :taskId="item.id"
           :taskPriority="item.taskPriority"
           :parentId="null"
+          :createTime="item.createTime"
+          :updateTime="item.updateTime"
           @taskChange="handleChange"
         />
 
@@ -29,6 +31,8 @@
           :subTasks="item.subTasks ?? []"
           :taskPriority="item.taskPriority"
           :parentId="item.id"
+          :createTime="item.createTime"
+          :updateTime="item.updateTime"
           @taskChange="handleChange"
         ></sku-task-gruop>
       </template>

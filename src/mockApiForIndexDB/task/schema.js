@@ -12,6 +12,10 @@ export const schema = {
   taskPriority: "06",
   // 父任务ID
   parentId: "",
+  // 创建时间
+  createTime: "",
+  // 更新时间
+  updateTime: "",
   // 子任务（taskGroup为true时，该字段有效）
   subTasks: [
     {
@@ -25,6 +29,10 @@ export const schema = {
       taskPriority: "06",
       // 父任务ID
       parentId: "",
+      // 创建时间
+      createTime: "",
+      // 更新时间
+      updateTime: "",
     },
   ],
 };

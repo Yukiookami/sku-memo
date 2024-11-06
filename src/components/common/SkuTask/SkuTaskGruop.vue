@@ -135,7 +135,7 @@ const handleChange = (e) => {
 };
 
 /**
- * 关闭前的操作, 如果点击的是删除按钮则阻止关闭
+ * 关闭前的操作
  * @param action
  * @param done
  */
