@@ -235,4 +235,4 @@ cordova build ios
 
 打包完成后，放入 cordova 的 platforms/ios/www 中
 
-打开 xcode，点击 product->archive，然后打包完成后，在弹出的 Archives 中，选择在 finder 中打开，展开包，进入 Products -> Applications，新建 payLoad 文件夹，将 app 放入其中，然后压缩，改后缀为.ipa，然后用 altstore 安装到手机
+打开 xcode，点击 product->archive，然后打包完成后，在弹出的 Archives 中，选择在 finder 中打开，展开包，进入 Products -> Applications，新建 Payload 文件夹，将 app 放入其中，然后压缩，改后缀为.ipa，然后用 altstore 安装到手机
