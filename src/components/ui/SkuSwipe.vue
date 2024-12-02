@@ -59,10 +59,10 @@ const handleBeforeClose = (action, done) => {
       height: 100%;
     }
 
-    ::v-deep .nut-button--square {
-      border-top-right-radius: $button-radius;
-      border-bottom-right-radius: $button-radius;
-    }
+    // ::v-deep .nut-button--square {
+    //   border-top-right-radius: $button-radius;
+    //   border-bottom-right-radius: $button-radius;
+    // }
   }
 
   // 左侧功能区
@@ -74,10 +74,10 @@ const handleBeforeClose = (action, done) => {
       height: 100%;
     }
 
-    ::v-deep .nut-button--square {
-      border-top-left-radius: $button-radius;
-      border-bottom-left-radius: $button-radius;
-    }
+    // ::v-deep .nut-button--square {
+    //   border-top-left-radius: $button-radius;
+    //   border-bottom-left-radius: $button-radius;
+    // }
   }
 }
 </style>

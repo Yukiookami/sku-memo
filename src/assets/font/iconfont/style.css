@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?z84dxe');
-  src:  url('fonts/icomoon.eot?z84dxe#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?z84dxe') format('truetype'),
-    url('fonts/icomoon.woff?z84dxe') format('woff'),
-    url('fonts/icomoon.svg?z84dxe#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?uedj7b');
+  src:  url('fonts/icomoon.eot?uedj7b#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?uedj7b') format('truetype'),
+    url('fonts/icomoon.woff?uedj7b') format('woff'),
+    url('fonts/icomoon.svg?uedj7b#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-delete:before {
+  content: "\e906";
+  color: #666;
+}
+.icon-ok:before {
+  content: "\e907";
+  color: #666;
+}
+.icon-todo:before {
+  content: "\e908";
+  color: #666;
+}
 .icon-taskGroup:before {
   content: "\e905";
 }

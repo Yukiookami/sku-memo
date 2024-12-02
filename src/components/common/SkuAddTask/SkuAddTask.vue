@@ -55,6 +55,17 @@
             <span>创建组</span>
           </div>
           <!-- 子任务end -->
+
+          <!-- 当前任务状态，暂时只适用于任务组 -->
+          <div
+            @click="handleClickTaskStatus"
+            v-if="task.taskGroup"
+            :class="`task-status-${state.statusClass} task-status`"
+          >
+            <i :class="`${state.statusClass} status-icon`"></i>
+
+            <span>{{ state.taskStatusName }}</span>
+          </div>
         </div>
         <!-- 左侧区域end -->
 
@@ -91,17 +102,39 @@
     />
   </nut-popup>
   <!-- 优先级选择框end -->
+
+  <!-- 当前任务状态选择框 -->
+  <nut-popup
+    v-model:visible="showStatus"
+    position="bottom"
+    :style="{ width: '100%' }"
+  >
+    <nut-picker
+      v-model="statusState.selectedPriority"
+      :columns="statusState.columns"
+      :title="statusState.current"
+      three-dimensional
+      @confirm="handleConfirmStatus"
+      @change="handleChangeStatus"
+    />
+  </nut-popup>
+  <!-- 当前任务选择框end -->
 </template>
 
 <script setup>
 import SkuIcon from "../../ui/SkuIcon.vue";
 import SkuPriorityText from "../../ui/SkuPriorityText.vue";
 import add from "../../../assets/images/skuAddTask/添加.svg";
-import { computed, onBeforeMount, reactive, watch } from "vue";
+import { computed, onBeforeMount, reactive, toRaw, watch } from "vue";
 import { ref } from "vue";
-import { TaskPriority, TaskStatus } from "../../../assets/data/status";
+import {
+  TaskPriority,
+  TaskStatus,
+  TaskStatusIcon,
+} from "../../../assets/data/status";
 import { convertEnumToArray } from "../../../utils";
 import { useStore } from "../../../stores";
+import { showConfirmDialog } from "vant";
 
 // ================== 定义 ==================
 const store = useStore();
@@ -112,6 +145,8 @@ const emit = defineEmits(["submit", "editSubmit"]);
 const show = ref(false);
 // 是否显示优先级选择框
 const showPriority = ref(false);
+// 是否显示当前任务状态选择框
+const showStatus = ref(false);
 
 // 状态
 const state = reactive({
@@ -127,6 +162,14 @@ const state = reactive({
   placeholder: computed(() =>
     task.taskGroup ? "请输入任务组标题" : "请输入任务名称"
   ),
+  // 编辑当前任务状态
+  statusClass: computed(() => {
+    return TaskStatusIcon[task.taskStatus];
+  }),
+  // 当前任务状态
+  taskStatusName: computed(() => {
+    return TaskStatus[task.taskStatus];
+  }),
 });
 
 // 任务数据
@@ -141,6 +184,10 @@ const task = reactive({
   taskPriority: TaskPriority["无优先级"],
   // 是否为任务组
   taskGroup: false,
+  // 子任务
+  subTasks: [],
+  // 当前任务状态
+  taskStatus: TaskStatus["未完成"],
 });
 
 // 优先级选择框数据
@@ -151,6 +198,16 @@ const priorityState = reactive({
   current: TaskPriority["无优先级"],
   // 选中的优先级
   selectedPriority: [TaskPriority["无优先级"]],
+});
+
+// 任务状态选择框数据
+const statusState = reactive({
+  // 选项
+  columns: [],
+  // 当前选择
+  current: TaskStatus["未完成"],
+  // 选中的任务状态
+  selectedStatus: [TaskStatus["未完成"]],
 });
 
 // 编辑数据
@@ -165,6 +222,10 @@ const editData = reactive({
   taskGroup: false,
   // 任务id
   taskId: "",
+  // 子任务
+  subTasks: [],
+  // 创建时间
+  createTime: "",
 });
 // ================== 定义end ==================
 
@@ -186,10 +247,10 @@ const handleClickAddIcon = () => {
 /**
  * 确认添加
  */
-const handleSubmit = () => {
+const handleSubmit = async () => {
   emit("submit", {
     taskName: task.taskName,
-    taskStatus: TaskStatus["未完成"],
+    taskStatus: task.taskStatus ?? TaskStatus["未完成"],
     taskPriority: task.taskPriority ?? TaskPriority["无优先级"],
     taskGroup: task.taskGroup ?? false,
     createTime: new Date().getTime(),
@@ -205,13 +266,28 @@ const handleSubmit = () => {
 /**
  * 确认编辑
  */
-const handleEditSubmit = () => {
+const handleEditSubmit = async () => {
+  if (editData.taskGroup && !task.taskGroup) {
+    show.value = false;
+    showPriority.value = false;
+
+    const res = await showConfirmDialog({
+      title: "更改任务组",
+      message: "任务组下的任务将会被清空，是否继续？",
+    });
+
+    if (res !== "confirm") {
+      return;
+    }
+  }
+
   emit("editSubmit", {
     taskName: task.taskName,
-    taskStatus: editData.taskStatus,
+    taskStatus: task.taskStatus ?? TaskStatus["未完成"],
     taskPriority: task.taskPriority ?? TaskPriority["无优先级"],
     taskGroup: task.taskGroup ?? false,
     taskId: editData.taskId,
+    subTasks: task.taskGroup ? toRaw(task.subTasks || []) : [],
     createTime: editData.createTime,
     updateTime: new Date().getTime(),
   });
@@ -312,6 +388,34 @@ const handleChangePriority = ({ selectedOptions }) => {
 };
 // ================== 优先级end ==================
 
+// ================== 任务状态 ==================
+/**
+ * 点击任务状态
+ */
+const handleClickTaskStatus = () => {
+  showStatus.value = true;
+};
+
+/**
+ * 确认选择任务状态
+ * @param {Array} values
+ */
+const handleConfirmStatus = ({ selectedOptions }) => {
+  task.taskStatus = selectedOptions[0].value;
+  statusState.current = selectedOptions[0].text;
+  statusState.selectedStatus = [selectedOptions[0].value];
+  showStatus.value = false;
+};
+
+/**
+ * 任务状态变动
+ * @param {Array} values
+ */
+const handleChangeStatus = ({ selectedOptions }) => {
+  statusState.current = selectedOptions[0].text;
+};
+// ================== 任务状态end ==================
+
 // ================== 子任务 ==================
 /**
  * 点击切换创建组的选中状态
@@ -326,6 +430,14 @@ const handleClickMakeGroup = () => {
 onBeforeMount(() => {
   // 获取优先级选项
   priorityState.columns = convertEnumToArray(TaskPriority).map((item) => {
+    return {
+      text: item.value,
+      value: item.key,
+    };
+  });
+
+  // 获取任务状态选项
+  statusState.columns = convertEnumToArray(TaskStatus).map((item) => {
     return {
       text: item.value,
       value: item.key,
@@ -349,6 +461,8 @@ watch(
     task.taskName = editData.taskName;
     task.taskPriority = editData.taskPriority;
     task.taskGroup = editData.taskGroup;
+    task.subTasks = editData.subTasks;
+    task.taskStatus = editData.taskStatus;
     priorityState.selectedPriority = [editData.taskPriority];
     state.isEdit = true;
     show.value = true;
@@ -399,9 +513,10 @@ watch(
       display: flex;
       align-items: center;
 
-      // 优先级，子任务
+      // 优先级，子任务, 任务组当前状态
       .task-priority,
-      .task-group {
+      .task-group,
+      .task-status {
         display: flex;
         align-items: center;
         margin-right: 12px;
@@ -420,10 +535,33 @@ watch(
         }
 
         .icon-priority,
-        .icon-taskGroup {
+        .icon-taskGroup,
+        .status-icon {
           transition: all 0.15s;
           font-size: 14px;
           margin-right: 3px;
+        }
+
+        // 任务状态的整体颜色变化
+        // 完成
+        &.task-status-icon-ok {
+          color: $task-done-color;
+          .icon-ok {
+            &::before {
+              color: $task-done-color;
+            }
+          }
+        }
+
+        // 删除
+        &.task-status-icon-delete {
+          color: $task-delete-color;
+
+          .icon-delete {
+            &::before {
+              color: $task-delete-color;
+            }
+          }
         }
 
         span {

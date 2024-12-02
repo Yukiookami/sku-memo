@@ -18,7 +18,11 @@
         >
           <sku-priority-text class="title-sec" :priority="taskPriority">
             <!-- 任务组标题 -->
-            <div>
+            <div
+              :class="{
+                'task-done': taskStatus === TaskStatus['已完成'],
+              }"
+            >
               <i class="icon-taskGroup"></i>
               <span>
                 {{ taskName }}
@@ -38,7 +42,12 @@
         </div>
 
         <template #left>
-          <nut-button shape="square" type="info"> 添加 </nut-button>
+          <nut-button @click="handleAdd" shape="square" type="info">
+            添加
+          </nut-button>
+          <nut-button @click="handleEdit" shape="square" type="success">
+            编辑
+          </nut-button>
         </template>
 
         <template #right>
@@ -96,6 +105,16 @@ const props = defineProps({
     type: Number,
     required: false,
   },
+  // 是否是任务组
+  taskGroup: {
+    type: Boolean,
+    default: true,
+  },
+  // 任务组状态
+  taskStatus: {
+    type: String,
+    default: TaskStatus["未完成"],
+  },
   // 任务组优先级
   taskPriority: {
     type: String,
@@ -111,6 +130,11 @@ const props = defineProps({
     type: Array,
     required: true,
     default: () => [],
+  },
+  // 创建时间
+  createTime: {
+    type: [String, Number],
+    required: false,
   },
 });
 
@@ -135,6 +159,25 @@ const handleChange = (e) => {
 };
 
 /**
+ * 添加任务
+ */
+const handleAdd = () => {
+  store.setIsAddSubTask({
+    parentId: props.taskId,
+    isAdd: true,
+  });
+};
+
+/**
+ * 编辑任务组
+ */
+const handleEdit = () => {
+  store.setEditTaskDataForSkuAddTask({
+    ...props,
+  });
+};
+
+/**
  * 关闭前的操作
  * @param action
  * @param done
@@ -142,13 +185,10 @@ const handleChange = (e) => {
 const handleBeforeClose = ({ position }) => {
   const callFunc = {
     // 实际为添加
-    [CloseCellType["编辑"]]: () => {
-      store.setIsAddSubTask({
-        parentId: props.taskId,
-        isAdd: true,
-      });
+    [CloseCellType["左侧"]]: () => {
+      return true;
     },
-    [CloseCellType["删除"]]: async () => {
+    [CloseCellType["右侧"]]: async () => {
       try {
         const res = await showConfirmDialog({
           title: "删除任务",
@@ -240,6 +280,12 @@ watch(
       display: flex;
       align-items: center;
       justify-content: space-between;
+
+      // 任务完成
+      .task-done {
+        text-decoration: line-through;
+        color: #ccc !important;
+      }
 
       .icon-taskGroup {
         margin-right: 0.9rem;

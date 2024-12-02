@@ -90,7 +90,7 @@ const props = defineProps({
     default: null,
   },
   createTime: {
-    type: Number,
+    type: [Number, String],
     default: null,
   },
   updateTime: {
@@ -126,7 +126,8 @@ const handleChange = (e) => {
  */
 const handleBeforeClose = ({ position }) => {
   const callFunc = {
-    [CloseCellType["编辑"]]: () => {
+    // 编辑
+    [CloseCellType["左侧"]]: () => {
       // 判断是否有parentId，如果有则为修改子任务
       if (props.parentId !== null) {
         store.setEditSubTaskDataForSkuAddSubTask({
@@ -138,7 +139,8 @@ const handleBeforeClose = ({ position }) => {
         });
       }
     },
-    [CloseCellType["删除"]]: async () => {
+    // 删除
+    [CloseCellType["右侧"]]: async () => {
       try {
         const res = await showConfirmDialog({
           title: "删除任务",

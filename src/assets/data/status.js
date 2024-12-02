@@ -64,12 +64,22 @@ export const TaskStatus = createEnum({
   "02": "已删除",
 });
 
+// 任务状态图标
+export const TaskStatusIcon = createEnum({
+  // 未完成
+  "00": "icon-todo",
+  // 已完成
+  "01": "icon-ok",
+  // 已删除
+  "02": "icon-delete",
+});
+
 // 关闭滑动单元格的类型（vant）
 export const CloseCellType = createEnum({
   // 左侧区域（编辑）
-  编辑: "left",
+  左侧: "left",
   // 右侧区域（删除）
-  删除: "right",
+  右侧: "right",
   // 主体部分
   主体: "cell",
   // 外部

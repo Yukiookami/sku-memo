@@ -32,6 +32,7 @@ defineProps({
 .sku-card,
 .child-card {
   border-radius: $button-radius;
+  overflow: hidden;
   user-select: none;
 
   min-height: 16px;
