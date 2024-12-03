@@ -25,6 +25,8 @@ export const useStore = defineStore({
     },
     // 需要编辑的子任务数据(SkuAddSubTask)
     editSubTaskDataForSkuAddSubTask: {},
+    // 原始task数据，方便参照
+    propertyTaskData: {},
   }),
   // 定义操作
   actions: {
@@ -55,6 +57,10 @@ export const useStore = defineStore({
     // 设置需要编辑的子任务数据(SkuAddSubTask)
     setEditSubTaskDataForSkuAddSubTask(data) {
       this.editSubTaskDataForSkuAddSubTask = data;
+    },
+    // 设置原始task数据
+    setPropertyTaskData(data) {
+      this.propertyTaskData = data;
     },
   },
 });

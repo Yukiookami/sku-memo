@@ -205,6 +205,42 @@ const updateData = async (id, updatedData, storeName) => {
   };
 };
 
+// 批量修改数据
+const updateDataList = async (updatedDataList, storeName) => {
+  let code = 200;
+  let msg = "success";
+  let dataForRes = [];
+
+  const db = await initDB(storeName);
+  const tx = db.transaction(storeName, "readwrite");
+  const store = tx.objectStore(storeName);
+
+  for (const updatedData of updatedDataList) {
+    const { id, ...restUpdatedData } = updatedData;
+    const existingData = await store.get(id);
+
+    if (existingData) {
+      // 更新数据
+      const updatedRecord = { ...existingData, ...restUpdatedData };
+      await store.put(updatedRecord);
+      dataForRes.push({ ...updatedRecord, id });
+    } else {
+      dataForRes.push({
+        code: 404,
+        msg: `ID 为 ${id} 的数据不存在`,
+      });
+    }
+  }
+
+  await tx.done;
+
+  return {
+    code,
+    msg,
+    data: dataForRes,
+  };
+};
+
 const skuIndexDb = {
   addData,
   getData,
@@ -213,6 +249,7 @@ const skuIndexDb = {
   updateData,
   clearData,
   deleteDataList,
+  updateDataList,
 };
 
 export default skuIndexDb;

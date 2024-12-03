@@ -9,7 +9,7 @@
 <template>
   <!-- 追加按钮 -->
   <div class="sku-add-icon" @click="handleClickAddIcon">
-    <sku-icon height="40px" width="40px" :icon="add" />
+    <i class="icon-addForButton" />
   </div>
   <!-- 追加按钮end -->
 
@@ -122,9 +122,7 @@
 </template>
 
 <script setup>
-import SkuIcon from "../../ui/SkuIcon.vue";
 import SkuPriorityText from "../../ui/SkuPriorityText.vue";
-import add from "../../../assets/images/skuAddTask/添加.svg";
 import { computed, onBeforeMount, reactive, toRaw, watch } from "vue";
 import { ref } from "vue";
 import {
@@ -195,7 +193,7 @@ const priorityState = reactive({
   // 选项
   columns: [],
   // 当前选择
-  current: TaskPriority["无优先级"],
+  current: "无优先级",
   // 选中的优先级
   selectedPriority: [TaskPriority["无优先级"]],
 });
@@ -205,7 +203,7 @@ const statusState = reactive({
   // 选项
   columns: [],
   // 当前选择
-  current: TaskStatus["未完成"],
+  current: "未完成",
   // 选中的任务状态
   selectedStatus: [TaskStatus["未完成"]],
 });
@@ -281,13 +279,20 @@ const handleEditSubmit = async () => {
     }
   }
 
+  // 参照原始数据，找到对应的子任务
+  const thisTask = store.propertyTaskData?.find(
+    (item) => item.taskId === editData.taskId
+  );
+
+  console.log(thisTask.subTasks);
+
   emit("editSubmit", {
     taskName: task.taskName,
     taskStatus: task.taskStatus ?? TaskStatus["未完成"],
     taskPriority: task.taskPriority ?? TaskPriority["无优先级"],
     taskGroup: task.taskGroup ?? false,
     taskId: editData.taskId,
-    subTasks: task.taskGroup ? toRaw(task.subTasks || []) : [],
+    subTasks: task.taskGroup ? toRaw(thisTask.subTasks) || [] : [],
     createTime: editData.createTime,
     updateTime: new Date().getTime(),
   });
@@ -306,6 +311,12 @@ const clearData = () => {
   // 清空编辑数据
   // 编辑数据清空策略
   const editDataStrategy = {
+    subTasks: () => {
+      return [];
+    },
+    taskGroup: () => {
+      return false;
+    },
     default: () => {
       return "";
     },
@@ -322,6 +333,15 @@ const clearData = () => {
   const taskStrategy = {
     taskPriority: () => {
       return TaskPriority["无优先级"];
+    },
+    taskStatus: () => {
+      return TaskStatus["未完成"];
+    },
+    taskGroup: () => {
+      return false;
+    },
+    subTasks: () => {
+      return [];
     },
     default: () => {
       return "";
@@ -354,6 +374,28 @@ const clearData = () => {
     const strategy =
       priorityStateStrategy[key] || priorityStateStrategy.default;
     priorityState[key] = strategy();
+  }
+
+  // 清空任务状态数据
+  // 任务状态数据清空策略
+  const statusStateStrategy = {
+    selectedStatus: () => {
+      return [TaskStatus["未完成"]];
+    },
+    current: () => {
+      return TaskStatus["未完成"];
+    },
+    columns: () => {
+      return statusState.columns;
+    },
+    default: () => {
+      return [];
+    },
+  };
+
+  for (const key in statusState) {
+    const strategy = statusStateStrategy[key] || statusStateStrategy.default;
+    statusState[key] = strategy();
   }
 
   state.isEdit = false;
@@ -474,15 +516,14 @@ watch(
 <style lang="scss" scoped>
 // 添加任务按钮，固定在右下角
 .sku-add-icon {
-  $icon-size: 40px;
-
   user-select: none;
   position: fixed;
   right: 15px;
   bottom: calc($footer-height + 15px);
   width: $icon-size;
   height: $icon-size;
-  background-color: #fff;
+  font-size: 25px;
+  background-color: $primary-color;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -490,6 +531,12 @@ watch(
   cursor: pointer;
   transition: all 0.3s;
   cursor: pointer;
+
+  .icon-addForButton {
+    &::before {
+      color: #fff;
+    }
+  }
 }
 
 .add-task-sec {

@@ -15,10 +15,19 @@
     </template>
   </sku-context-swipe>
 
+  <!-- 当目前显示已完成的时候显示删除按钮，可以批量删除已完成任务 -->
+  <transition name="fade" appear>
+    <sku-del-task
+      @deleteAllDoneTask="handleDeleteAllDoneTask"
+      v-show="store.activeIndexInFooter === Footer['已完成']"
+    />
+  </transition>
+  <!-- 有一个追加按钮 -->
   <sku-add-task
     @submit="handleAddTaskSubmit"
     @editSubmit="handleEditTaskSubmit"
   />
+  <!-- 只是面板 -->
   <sku-add-sub-task
     @submit="handleAddSubTaskSubmit"
     @editSubmit="handleEditSubTaskSubmit"
@@ -32,13 +41,16 @@ import SkuTask from "../components/common/SkuTask/SkuTask.vue";
 import SkuContextSwipe from "../components/layout/SkuContextSwipe.vue";
 import SkuAddTask from "../components/common/SkuAddTask/SkuAddTask.vue";
 import SkuAddSubTask from "../components/common/SkuAddTask/SkuAddSubTask.vue";
+import SkuDelTask from "../components/common/SkuDelTask/SkuDelTask.vue";
 import {
   httpTaskAdd,
   httpTaskChange,
+  httpTaskChangeAll,
   httpTaskGetAll,
 } from "../mockApiForIndexDB/task";
 import {
   ApiType,
+  Footer,
   sortType,
   TaskPriority,
   TaskStatus,
@@ -75,7 +87,8 @@ const filterToDoTask = (taskList) => {
     if (
       task.taskGroup &&
       task.subTasks?.length > 0 &&
-      task.taskStatus !== TaskStatus["已删除"]
+      task.taskStatus !== TaskStatus["已删除"] &&
+      task.taskStatus !== TaskStatus["已完成"]
     ) {
       // 显示组中状态是未完成的任务
       task.subTasks = task.subTasks.filter(
@@ -148,6 +161,8 @@ const addSubWithReload = getDataDecoratorWithParam(true);
 const editSubWithReload = getDataDecoratorWithParam(true);
 // 任务状态更改（仅限单任务和任务组标题）
 const taskChangeWithReload = getDataDecoratorWithParam(true);
+// 批量更新已完成任务状态为已删除
+const deleteAllDoneTaskWithReload = getDataDecoratorWithParam(true);
 // ================== 装饰器工厂end ==================
 
 // ================== 基础增删改查 ==================
@@ -169,6 +184,13 @@ const updateTaskList = async (e) => {
 };
 
 /**
+ * 批量更新任务
+ */
+const updateTaskListBatch = async (taskList) => {
+  await httpTaskChangeAll(taskList, state.nowUseDBName);
+};
+
+/**
  * 获取任务列表
  */
 const getAllTaskList = async (dbName) => {
@@ -176,11 +198,16 @@ const getAllTaskList = async (dbName) => {
   const res = await httpTaskGetAll(dbName);
   state.taskList = res.data ?? [];
 
+  // 设置任务列表到pinia，方便随时使用原始数据
+  store.setPropertyTaskData(res.data);
+
   // 排序任务列表
   sortTaskList(state.taskList, state.nowSortType);
 };
 
 // ================== 基础增删改查end ==================
+
+// ================== 排序 ==================
 /**
  * 排序任务列表
  */
@@ -224,8 +251,6 @@ const sortTaskList = (taskList, nowSortType) => {
   // 排序主任务列表
   sortTasks(taskList, nowSortType);
 };
-// ================== 排序 ==================
-
 // ================== 排序end ==================
 
 // ================== 单任务/子任务共通 ==================
@@ -319,6 +344,38 @@ const handleEditSubTaskSubmit = editSubWithReload(async (e) => {
 });
 // ================== 子任务追加end ==================
 
+// ================== 已完成任务删除 ==================
+/**
+ * 删除所有已完成任务
+ */
+const handleDeleteAllDoneTask = () => {
+  // 深拷贝原始对象
+  const taskList = _.cloneDeep(state.taskList);
+
+  // 判断任务是否已完成或状态为空
+  const isTaskCompletedOrEmpty = (task) => {
+    return task.taskStatus === TaskStatus["已完成"] || !task.taskStatus;
+  };
+
+  // 更新任务状态
+  taskList.forEach((item) => {
+    if (isTaskCompletedOrEmpty(item)) {
+      item.taskStatus = TaskStatus["已删除"];
+      if (item.subTasks && item.subTasks.length > 0) {
+        item.subTasks.forEach((subItem) => {
+          if (isTaskCompletedOrEmpty(subItem)) {
+            subItem.taskStatus = TaskStatus["已删除"];
+          }
+        });
+      }
+    }
+  });
+
+  deleteAllDoneTaskWithReload(updateTaskListBatch)(taskList);
+};
+
+// ================== 已完成任务删除end ==================
+
 // ================== 数据监听 ==================
 // 监听侧边栏变化，切换请求类型
 watch(
@@ -338,4 +395,18 @@ onBeforeMount(() => {
 // ================== 初期渲染end ==================
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+// 删除按钮的淡入淡出
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+
+.fade-leave-to {
+  opacity: 0; /* 确保离开时变得透明 */
+}
+
+.fade-leave-from {
+  opacity: 1; /* 离开时初始的不透明状态 */
+}
+</style>

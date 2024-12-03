@@ -19,6 +19,11 @@ const httpTaskChange = async (id, param, storeName) => {
   return skuIndexDb.updateData(id, param, storeName);
 };
 
+// 任务批量修改
+const httpTaskChangeAll = async (paramList, storeName) => {
+  return skuIndexDb.updateDataList(paramList, storeName);
+};
+
 // 任务获取
 const httpTaskGet = async (id, storeName) => {
   return skuIndexDb.getData(id, storeName);
@@ -50,4 +55,5 @@ export {
   httpTaskDelete,
   httpTaskGetAll,
   httpTaskDeleteAll,
+  httpTaskChangeAll,
 };

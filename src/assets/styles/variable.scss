@@ -7,6 +7,11 @@ $task-done-color: #2e7d32;
 // 任务删除色
 $task-delete-color: #b71c1c;
 
+// 任务删除按钮颜色
+$task-delete-button-color: #ec6363;
+// 任务添加按钮颜色
+$task-add-button-color: #8dc6ff;
+
 // header高度
 $header-height: 60px;
 
@@ -15,6 +20,11 @@ $footer-height: 60px;
 
 // checkbox大小
 $checkbox-size: 1.1rem;
+
+// 按钮大小（影响添加和删除的圆形按钮）
+// src\components\common\SkuAddTask\SkuAddTask.vue
+// https://github.com/Yukiookami/MakeMemo/blob/master/src/components/common/SkuDelTask/SkuDelTask.vue
+$icon-size: 40px;
 
 // 产品卡片圆角
 // 影响范围：src\components\ui\SkuCard.vue
