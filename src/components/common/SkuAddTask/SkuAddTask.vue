@@ -280,11 +280,9 @@ const handleEditSubmit = async () => {
   }
 
   // 参照原始数据，找到对应的子任务
-  const thisTask = store.propertyTaskData?.find(
-    (item) => item.taskId === editData.taskId
-  );
-
-  console.log(thisTask.subTasks);
+  const thisTask =
+    store.propertyTaskData?.find((item) => item.taskId === editData.taskId) ??
+    {};
 
   emit("editSubmit", {
     taskName: task.taskName,

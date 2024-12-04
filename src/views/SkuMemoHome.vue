@@ -45,7 +45,7 @@ import SkuDelTask from "../components/common/SkuDelTask/SkuDelTask.vue";
 import {
   httpTaskAdd,
   httpTaskChange,
-  httpTaskChangeAll,
+  httpTaskDeleteAll,
   httpTaskGetAll,
 } from "../mockApiForIndexDB/task";
 import {
@@ -184,10 +184,11 @@ const updateTaskList = async (e) => {
 };
 
 /**
- * 批量更新任务
+ * 批量删除任务
  */
-const updateTaskListBatch = async (taskList) => {
-  await httpTaskChangeAll(taskList, state.nowUseDBName);
+const deleteTaskListBatch = async (taskList) => {
+  const taskids = taskList.map((item) => item.id);
+  await httpTaskDeleteAll(taskids, state.nowUseDBName);
 };
 
 /**
@@ -358,20 +359,17 @@ const handleDeleteAllDoneTask = () => {
   };
 
   // 更新任务状态
-  taskList.forEach((item) => {
+  taskList.map((item) => {
     if (isTaskCompletedOrEmpty(item)) {
       item.taskStatus = TaskStatus["已删除"];
-      if (item.subTasks && item.subTasks.length > 0) {
-        item.subTasks.forEach((subItem) => {
-          if (isTaskCompletedOrEmpty(subItem)) {
-            subItem.taskStatus = TaskStatus["已删除"];
-          }
-        });
-      }
     }
   });
 
-  deleteAllDoneTaskWithReload(updateTaskListBatch)(taskList);
+  const listForDel = taskList.filter(
+    (item) => item.taskStatus === TaskStatus["已删除"]
+  );
+
+  deleteAllDoneTaskWithReload(deleteTaskListBatch)(listForDel);
 };
 
 // ================== 已完成任务删除end ==================

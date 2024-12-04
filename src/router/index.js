@@ -5,14 +5,15 @@
  * @FilePath: \SkuMemo\src\router\index.js
  */
 import { createRouter, createWebHashHistory } from "vue-router";
+import { routerName } from "../assets/data/routerName";
 
 const routes = [
   {
     path: "/",
-    redirect: "/home",
+    redirect: routerName["首页"],
   },
   {
-    path: "/home",
+    path: routerName["首页"],
     name: "home",
     component: () => import("../views/SkuMemoHome.vue"),
   },

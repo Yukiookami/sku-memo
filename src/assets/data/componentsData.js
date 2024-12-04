@@ -3,6 +3,7 @@ import work from "../images/sideBar/工作.svg";
 import life_active from "../images/sideBar/生活-选中.svg";
 import work_active from "../images/sideBar/工作-选中.svg";
 import { Sidebar, Footer } from "./status";
+import { routerName } from "./routerName";
 
 // 底部菜单
 export const footerMenu = [
@@ -26,14 +27,14 @@ export const sidebarMenu = [
     id: Sidebar["生活"],
     title: "生活",
     icon: life,
-    link: "/",
+    link: routerName["首页"],
     active: life_active,
   },
   {
     id: Sidebar["工作"],
     title: "工作",
     icon: work,
-    link: "/",
+    link: routerName["首页"],
     active: work_active,
   },
 ];

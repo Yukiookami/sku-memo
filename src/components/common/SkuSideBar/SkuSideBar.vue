@@ -5,7 +5,6 @@
 -->
 <!-- 
   影响范围：src\components\layout\SkuMainlayout.vue
-
 -->
 <template>
   <div class="sku-sidebar">
