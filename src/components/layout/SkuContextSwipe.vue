@@ -60,12 +60,12 @@ const longPressTime = 300; // 可以根据需要调整此值
 
 const onLongPress = () => {
   allowSwipe = true;
-  store.setIsTouchForContextMove(true); // 设置 store 中的是否内容滑动状态为 true
+  store.isTouchForContextMove = true; // 设置 store 中的是否内容滑动状态为 true
 };
 
 const onLongPressEnd = () => {
   allowSwipe = false;
-  store.setIsTouchForContextMove(false); // 设置 store 中的是否内容滑动状态为 true
+  store.isTouchForContextMove = false; // 设置 store 中的是否内容滑动状态为 false
 };
 
 /**
@@ -144,7 +144,7 @@ const onTouchEnd = () => {
   if (!allowSwipe) {
     return;
   }
-  store.setIsTouchForContextMove(false); // 设置 store 中的是否内容滑动状态为 false
+  store.isTouchForContextMove = false; // 设置 store 中的是否内容滑动状态为 false
   if (!isSwiping || !hasSwiped) {
     isSwiping = false;
     return; // 只有在滑动后才处理
@@ -161,12 +161,12 @@ const onTouchEnd = () => {
       // 向右滑动且当前显示的是 right，则切换到 left
       setSwipeToLeft();
       // 切换到左侧时，设置 store 中的当前分类为 0
-      store.setActiveIndexInFooter(0);
+      store.activeIndexInFooter = 0;
     } else if (deltaX < 0 && currentView === "left") {
       // 向左滑动且当前显示的是 left，则切换到 right
       setSwipeToRight();
       // 切换到右侧时，设置 store 中的当前分类为 1
-      store.setActiveIndexInFooter(1);
+      store.activeIndexInFooter = 1;
     } else {
       // 已经是 left 或 right，并且继续向边界滑动，不做处理
       swipeContainer.value.style.transform =

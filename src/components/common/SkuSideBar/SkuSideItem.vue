@@ -54,9 +54,9 @@ defineProps({
 });
 
 const handleCilckSidebarItem = (item) => {
-  store.setActiveIndexInSidebar(item.id);
-  store.setActiveIndexInFooter(0);
-  store.setIsSidebarOpen(false);
+  store.activeIndexInSidebar = item.id;
+  store.activeIndexInFooter = 0;
+  store.isSidebarOpen = false;
 };
 </script>
 

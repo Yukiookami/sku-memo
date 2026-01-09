@@ -26,4 +26,6 @@ import SkuFooter from "./components/layout/SkuFooter.vue";
 import { footerMenu } from "./assets/data/componentsData";
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+/* App styles */
+</style>

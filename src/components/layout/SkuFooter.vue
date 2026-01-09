@@ -64,7 +64,7 @@ defineProps({
  * @param item 底部按钮对象
  */
 const handleCilckFooterItem = (item) => {
-  store.setActiveIndexInFooter(item.id);
+  store.activeIndexInFooter = item.id;
 };
 </script>
 

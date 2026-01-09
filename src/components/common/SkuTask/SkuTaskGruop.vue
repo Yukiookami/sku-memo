@@ -162,19 +162,19 @@ const handleChange = (e) => {
  * 添加任务
  */
 const handleAdd = () => {
-  store.setIsAddSubTask({
+  store.isAddSubTask = {
     parentId: props.taskId,
     isAdd: true,
-  });
+  };
 };
 
 /**
  * 编辑任务组
  */
 const handleEdit = () => {
-  store.setEditTaskDataForSkuAddTask({
+  store.editTaskDataForSkuAddTask = {
     ...props,
-  });
+  };
 };
 
 /**

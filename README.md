@@ -2,6 +2,16 @@
 
 ## 版本号
 
+v0.6.0 - **重大更新**：从 Cordova 迁移到 Capacitor，技术栈全面升级
+
+- 🚀 集成 Capacitor 8.0 跨平台框架，替代 Cordova
+- ⬆️ 升级 Vue 到 3.5.26（最新稳定版）
+- ⬆️ 升级 Vite 到 5.4.21
+- ⬆️ 升级 Pinia 到 2.3.1
+- ⬆️ 升级 Vue Router 到 4.6.4
+- ⬆️ 升级所有 UI 框架和开发工具依赖
+- 🔧 修复安全漏洞，提升项目安全性
+
 v0.5.7 - 修正单个任务无法修改问题，修改已完成删除为真删除
 
 v0.5.6 一键删除完了任务，修复任务组更新会丢失子任务数据的问题，修复优先级与状态初始值不正确导致初期渲染不正确的问题。修复重置不正确的问题
@@ -31,23 +41,62 @@ v0.4.2 追加 SkuCard 组件 转移 SkuTaskItem 组件的阴影样式到 SkuCard
 
 ## 技术栈
 
-- Vue3.x
-- javascript
-- pinia 状态管理
-- vue-router 路由管理
-- nutui UI 框架 <https://nutui.jd.com/h5/vue/4x/#/zh-CN/component/button>
-- vant UI 框架 <https://vant-ui.github.io/vant/#/zh-CN/quickstart>
-- axios 网络请求（暂无后台）
-- indexDB 本地存储数据库
-- cordova 跨平台打包
+- Vue 3.5.26 (最新稳定版)
+- JavaScript (ES Module)
+- Pinia 2.3.1 状态管理
+- Vue Router 4.6.4 路由管理
+- NutUI 4.3.14 UI 框架 <https://nutui.jd.com/h5/vue/4x/#/zh-CN/component/button>
+- Vant 4.9.22 UI 框架 <https://vant-ui.github.io/vant/#/zh-CN/quickstart>
+- IndexedDB 本地存储数据库 (使用 idb 8.0.3)
+- **Capacitor 8.0** 跨平台打包框架（支持 iOS/Android）
+- Vite 5.4.21 构建工具
 - 字体图标转换 <https://icomoon.io/>
-- 工具函数库 lodash
+- 工具函数库 lodash 4.17.21
 
 ## 项目启动
+
+> 💡 **Capacitor 详细使用说明**：查看 [CAPACITOR.md](./CAPACITOR.md) 了解所有脚本的详细说明和使用流程
+
+### 开发环境
 
 ```bash
 npm install
 npm run dev
+```
+
+### 构建和打包
+
+```bash
+# 构建 Web 版本
+npm run build
+
+# 同步代码到原生平台（构建 + 同步）
+npm run cap:sync
+
+# 在 iOS 模拟器运行
+npm run cap:run:ios
+
+# 在 Android 模拟器运行
+npm run cap:run:android
+
+# 打开 Xcode（iOS）
+npm run cap:open:ios
+
+# 打开 Android Studio
+npm run cap:open:android
+```
+
+### Capacitor 相关命令
+
+```bash
+# 手动同步 Web 代码到原生项目
+npx cap sync
+
+# 更新 Capacitor 依赖
+npx cap update
+
+# 查看已安装的插件
+npx cap ls
 ```
 
 ## 项目结构

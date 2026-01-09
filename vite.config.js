@@ -27,6 +27,7 @@ export default defineConfig({
         // 全局变量
         additionalData: `@import "@nutui/nutui/dist/styles/variables-jdt.scss";
         @import "./src/assets/styles/variable.scss";`,
+        silenceDeprecations: ['import'], // 静默 @import 弃用警告
       },
     },
   },

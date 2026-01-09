@@ -130,13 +130,13 @@ const handleBeforeClose = ({ position }) => {
     [CloseCellType["左侧"]]: () => {
       // 判断是否有parentId，如果有则为修改子任务
       if (props.parentId !== null) {
-        store.setEditSubTaskDataForSkuAddSubTask({
+        store.editSubTaskDataForSkuAddSubTask = {
           ...props,
-        });
+        };
       } else {
-        store.setEditTaskDataForSkuAddTask({
+        store.editTaskDataForSkuAddTask = {
           ...props,
-        });
+        };
       }
     },
     // 删除

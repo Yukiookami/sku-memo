@@ -200,7 +200,7 @@ const getAllTaskList = async (dbName) => {
   state.taskList = res.data ?? [];
 
   // 设置任务列表到pinia，方便随时使用原始数据
-  store.setPropertyTaskData(res.data);
+  store.propertyTaskData = res.data;
 
   // 排序任务列表
   sortTaskList(state.taskList, state.nowSortType);
@@ -233,6 +233,11 @@ const sortTaskList = (taskList, nowSortType) => {
     );
   };
 
+  /**
+   * 任务排序
+   * @param tasks
+   * @param nowSortType
+   */
   const sortTasks = (tasks, nowSortType) => {
     const isAscending = nowSortType === sortType["优先级升序"];
     tasks.sort((a, b) => {

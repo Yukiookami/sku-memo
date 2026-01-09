@@ -44,7 +44,7 @@ const showLeft = ref(false);
 
 const handleClickSideMenuMask = () => {
   showLeft.value = false;
-  store.setIsSidebarOpen(false);
+  store.isSidebarOpen = false;
 };
 
 watch(

@@ -37,7 +37,7 @@ import SkuText from "../ui/SkuText.vue";
 const store = useStore();
 
 const handleClickSideMenu = () => {
-  store.setIsSidebarOpen(true);
+  store.isSidebarOpen = true;
 };
 </script>
 
