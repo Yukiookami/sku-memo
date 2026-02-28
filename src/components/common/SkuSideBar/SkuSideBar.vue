@@ -69,7 +69,7 @@ watch(
     align-items: center;
     height: 100%;
     width: 100%;
-    padding: 10px 0;
+    padding: 35px 0;
 
     .logo-title {
       margin: 20px 0 40px 0;

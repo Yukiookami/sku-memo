@@ -38,7 +38,7 @@ import SkuSideBar from "../common/SkuSideBar/SkuSideBar.vue";
 <style lang="scss" scoped>
 .sku-main-layout {
   position: relative;
-  font-family: "chinese-font";
+  font-family: "chinese-font", sans-serif;
   height: calc(var(--vh, 1vh) * 100); /* 使用动态计算的视口高度 */
   height: -webkit-fill-available; /* 使用 webkit-fill-available 解决在Safari中，超出满屏的问题 */
   width: 100vw;

@@ -56,7 +56,7 @@ let longPressTimer = null;
 // 是否允许滑动
 let allowSwipe = false;
 // 长按时间
-const longPressTime = 300; // 可以根据需要调整此值
+const longPressTime = 150; // 可以根据需要调整此值
 
 const onLongPress = () => {
   allowSwipe = true;

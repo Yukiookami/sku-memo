@@ -228,66 +228,64 @@ npm install sass
 npm install pinia
 ```
 
-### cordova 打包手机端
+## 📱 Capacitor 打包部署
+
+> 项目已从 Cordova 迁移到 Capacitor 8.0，更多详细说明请查看 [CAPACITOR.md](./CAPACITOR.md)
+
+### 快速开始
 
 ```bash
-npm install -g cordova
+# 1. 构建并同步到原生项目
+npm run cap:sync
+
+# 2. 在模拟器/真机运行
+npm run cap:run:ios        # iOS
+npm run cap:run:android    # Android
 ```
 
-#### cordova 创建项目
+### 打包发布
+
+#### iOS 打包（macOS）
 
 ```bash
-cordova create SkuMemo com.skumemo SkuMemo
+# 1. 同步最新代码
+npm run cap:sync
+
+# 2. 打开 Xcode
+npm run cap:open:ios
+
+# 3. 在 Xcode 中操作：
+# - Product → Archive
+# - 前往~/Library/Developer/Xcode/Archives/
+# - 选择最新的 Archive 右键点击它 → 显示包内容
+# 依次打开Products → Applications
+# 选择 .app 文件右键点击 → 显示包内容
+# 创建 Payload 文件夹
+# 将 .app 文件拖入 Payload 文件夹
+# 压缩 Payload 文件夹为 Payload.zip
+# 将 Payload.zip 后缀改为 .ipa
+# 发送至手机使用altstore安装
 ```
 
-#### cordova 添加平台
+#### Android 打包
 
 ```bash
-cordova platform add android
-# 或者
-cordova platform add ios
+# 1. 同步最新代码
+npm run cap:sync
+
+# 2. 打开 Android Studio
+npm run cap:open:android
+
+# 3. 在 Android Studio 中操作：
+# - Build → Generate Signed Bundle / APK
+# - 选择 APK 或 AAB
+# - 配置签名信息
+# - 生成发布包
 ```
 
-#### 本体项目打包
+### 配合 AltStore 安装到 iPhone
 
 ```bash
-npm run build
+# 1. 在 Xcode 中导出 .ipa 文件（选择 Development 方式）
+# 2. 使用 AltStore 安装 .ipa 到手机
 ```
-
-然后把 dist 包复制到 cordova 的 www 目录下
-
-也可以配置 vite.config.js 的 build.outDir 来指定输出目录
-
-```javascript
-export default defineConfig({
-  build: {
-    outDir: "../cordova/www",
-  },
-});
-```
-
-或者在 packge 配置自动化脚本
-
-```json
-{
-  "scripts": {
-    "build": "vite build",
-    "cordova-copy": "cp -r dist/* ../my-cordova-app/www/",
-    "cordova-build": "npm run build && npm run cordova-copy"
-  }
-}
-```
-
-#### cordova 打包
-
-```bash
-cordova build android
-# 或者
-cordova build ios
-```
-
-#### 配合 altstore 安装到手机
-
-打包完成后，放入 cordova 的 platforms/ios/www 中
-
-打开 xcode，点击 product->archive，然后打包完成后，在弹出的 Archives 中，选择在 finder 中打开，展开包，进入 Products -> Applications，新建 Payload 文件夹，将 app 放入其中，然后压缩，改后缀为.ipa，然后用 altstore 安装到手机

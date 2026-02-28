@@ -70,7 +70,7 @@ const handleCilckFooterItem = (item) => {
 
 <style lang="scss" scoped>
 .sku-footer {
-  $button-line-height: 50%;
+  $button-line-height: 70%;
 
   display: flex;
   align-items: center;

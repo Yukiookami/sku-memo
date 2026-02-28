@@ -44,9 +44,9 @@ const handleClickSideMenu = () => {
 <style lang="scss" scoped>
 .sku-header {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
-  padding: 20px 20px;
+  padding: 20px 10px;
   height: $header-height;
   background-color: #fff;
   box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.1);
