@@ -17,7 +17,7 @@
   <nut-popup
     v-model:visible="show"
     position="bottom"
-    :style="{ width: '100%', height: '80px' }"
+    :style="{ width: '100%' }"
   >
     <div class="add-task-sec">
       <nut-input
@@ -37,7 +37,9 @@
             <div class="task-priority" @click="handleClickTaskPriority">
               <i class="icon-priority"></i>
 
-              <span>{{ TaskPriority[task.taskPriority] }}</span>
+              <span>{{
+                TaskPriority[task.taskPriority] ?? priorityState.current
+              }}</span>
             </div>
           </sku-priority-text>
           <!-- 优先级end -->
@@ -158,7 +160,7 @@ const state = reactive({
   handleClick: computed(() => (state.isEdit ? handleEditSubmit : handleSubmit)),
   // placeholder提示文字
   placeholder: computed(() =>
-    task.taskGroup ? "请输入任务组标题" : "请输入任务名称"
+    task.taskGroup ? "请输入任务组标题" : "请输入任务名称",
   ),
   // 编辑当前任务状态
   statusClass: computed(() => {
@@ -281,8 +283,9 @@ const handleEditSubmit = async () => {
 
   // 参照原始数据，找到对应的子任务
   const thisTask =
-    store.propertyTaskData?.find((item) => item.taskId === editData.taskId) ??
-    {};
+    store.propertyTaskData?.find(
+      (item) => (item.id ?? item.taskId) === editData.taskId,
+    ) ?? {};
 
   emit("editSubmit", {
     taskName: task.taskName,
@@ -358,7 +361,7 @@ const clearData = () => {
       return [TaskPriority["无优先级"]];
     },
     current: () => {
-      return TaskPriority["无优先级"];
+      return "无优先级";
     },
     columns: () => {
       return priorityState.columns;
@@ -381,7 +384,7 @@ const clearData = () => {
       return [TaskStatus["未完成"]];
     },
     current: () => {
-      return TaskStatus["未完成"];
+      return "未完成";
     },
     columns: () => {
       return statusState.columns;
@@ -506,7 +509,7 @@ watch(
     priorityState.selectedPriority = [editData.taskPriority];
     state.isEdit = true;
     show.value = true;
-  }
+  },
 );
 // ================== 数据监听end ==================
 </script>
@@ -546,8 +549,8 @@ watch(
       margin-top: -1px;
     }
 
-    height: 39px;
-    padding: 0 10px;
+    height: 60px;
+    padding: 5px 10px 30px 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;

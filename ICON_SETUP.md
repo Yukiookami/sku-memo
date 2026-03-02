@@ -9,11 +9,13 @@
 #### 步骤：
 
 1. **打开 Xcode**
+
    ```bash
    npm run cap:open:ios
    ```
 
 2. **在 Xcode 中配置图标**
+
    - 在左侧项目导航器中，点击 `App` 项目
    - 选择 `App` target
    - 点击 `General` 标签
@@ -26,20 +28,20 @@
 
 #### 图标尺寸对应关系：
 
-| 文件名 | 尺寸 | 用途 |
-|--------|------|------|
-| `ios_icon_1024x1024.png` | 1024×1024 | App Store |
-| `ios_icon_180x180.png` | 180×180 | iPhone (60pt @3x) |
-| `ios_icon_120x120.png` | 120×120 | iPhone (60pt @2x) |
-| `ios_icon_152x152.png` | 152×152 | iPad (76pt @2x) |
-| `ios_icon_167x167.png` | 167×167 | iPad Pro (83.5pt @2x) |
-| `ios_icon_80x80.png` | 80×80 | iPhone Spotlight (40pt @2x) |
-| `ios_icon_87x87.png` | 87×87 | iPhone Settings (29pt @3x) |
-| `ios_icon_60x60.png` | 60×60 | iPhone (60pt @1x) |
-| `ios_icon_58x58.png` | 58×58 | iPhone Settings (29pt @2x) |
-| `ios_icon_40x40.png` | 40×40 | iPad/iPhone Spotlight (40pt @1x) |
-| `ios_icon_29x29.png` | 29×29 | Settings (29pt @1x) |
-| `ios_icon_20x20.png` | 20×20 | Notifications (20pt @1x) |
+| 文件名                   | 尺寸      | 用途                             |
+| ------------------------ | --------- | -------------------------------- |
+| `ios_icon_1024x1024.png` | 1024×1024 | App Store                        |
+| `ios_icon_180x180.png`   | 180×180   | iPhone (60pt @3x)                |
+| `ios_icon_120x120.png`   | 120×120   | iPhone (60pt @2x)                |
+| `ios_icon_152x152.png`   | 152×152   | iPad (76pt @2x)                  |
+| `ios_icon_167x167.png`   | 167×167   | iPad Pro (83.5pt @2x)            |
+| `ios_icon_80x80.png`     | 80×80     | iPhone Spotlight (40pt @2x)      |
+| `ios_icon_87x87.png`     | 87×87     | iPhone Settings (29pt @3x)       |
+| `ios_icon_60x60.png`     | 60×60     | iPhone (60pt @1x)                |
+| `ios_icon_58x58.png`     | 58×58     | iPhone Settings (29pt @2x)       |
+| `ios_icon_40x40.png`     | 40×40     | iPad/iPhone Spotlight (40pt @1x) |
+| `ios_icon_29x29.png`     | 29×29     | Settings (29pt @1x)              |
+| `ios_icon_20x20.png`     | 20×20     | Notifications (20pt @1x)         |
 
 ---
 
@@ -94,6 +96,7 @@ Android 需要多个分辨率的图标。
 ### 生成 Android 图标
 
 1. **使用在线工具生成**
+
    - 访问：https://icon.kitchen/ 或 https://romannurik.github.io/AndroidAssetStudio/
    - 上传你的 1024x1024 图标
    - 下载生成的资源包
@@ -101,6 +104,7 @@ Android 需要多个分辨率的图标。
 2. **或手动创建不同尺寸**
 
    需要以下尺寸：
+
    ```
    mipmap-mdpi/     48×48
    mipmap-hdpi/     72×72
@@ -175,6 +179,7 @@ npm install -D @capacitor/assets
 ### 配置
 
 1. 创建 `assets` 目录结构：
+
    ```
    resources/
    ├── icon.png          # 1024x1024 或更大
@@ -182,12 +187,14 @@ npm install -D @capacitor/assets
    ```
 
 2. 复制你的图标：
+
    ```bash
    mkdir -p resources
    cp public/iosBuildIcon/ios_icon_1024x1024.png resources/icon.png
    ```
 
 3. 生成所有平台图标：
+
    ```bash
    npx capacitor-assets generate
    ```
@@ -226,10 +233,12 @@ npm run cap:sync
 ## ✅ 验证图标
 
 ### iOS
+
 1. 在 Xcode 中查看 Assets.xcassets
 2. 运行应用在模拟器查看主屏幕图标
 
 ### Android
+
 1. 在 Android Studio 中查看 `res/mipmap-*` 目录
 2. 运行应用在模拟器查看启动器图标
 

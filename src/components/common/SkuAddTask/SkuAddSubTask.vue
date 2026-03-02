@@ -228,7 +228,7 @@ const clearData = () => {
       return [TaskPriority["无优先级"]];
     },
     current: () => {
-      return TaskPriority["无优先级"];
+      return "无优先级";
     },
     columns: () => {
       return priorityState.columns;
@@ -301,7 +301,7 @@ watch(
 
     show.value = newVal.isAdd;
     parentId.value = newVal.parentId;
-  }
+  },
 );
 
 // 编辑数据变动是否为编辑模式
@@ -322,7 +322,7 @@ watch(
 
     state.isEdit = true;
     show.value = true;
-  }
+  },
 );
 // ================== 数据监听end ==================
 </script>

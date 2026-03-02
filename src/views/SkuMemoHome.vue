@@ -92,7 +92,7 @@ const filterToDoTask = (taskList) => {
     ) {
       // 显示组中状态是未完成的任务
       task.subTasks = task.subTasks.filter(
-        (subTask) => subTask.taskStatus === TaskStatus["未完成"]
+        (subTask) => subTask.taskStatus === TaskStatus["未完成"],
       );
       return true;
     }
@@ -118,7 +118,7 @@ const filterDoneTask = (taskList) => {
     ) {
       // 显示组中状态是已完成的任务
       task.subTasks = task.subTasks.filter(
-        (subTask) => subTask.taskStatus === TaskStatus["已完成"]
+        (subTask) => subTask.taskStatus === TaskStatus["已完成"],
       );
 
       return true;
@@ -192,15 +192,38 @@ const deleteTaskListBatch = async (taskList) => {
 };
 
 /**
+ * 格式化任务数据，兼容旧数据（如数字类型的priority/status）
+ */
+const normalizeTask = (task) => {
+  // 将数字类型的key补零为两位字符串，如 6 => "06"
+  const toKey = (val) => {
+    if (val === null || val === undefined) return undefined;
+    const str = String(val);
+    return str.length === 1 ? "0" + str : str;
+  };
+  return {
+    ...task,
+    taskPriority: toKey(task.taskPriority) ?? TaskPriority["无优先级"],
+    taskStatus: toKey(task.taskStatus) ?? TaskStatus["未完成"],
+    subTasks: (task.subTasks ?? []).map((sub) => ({
+      ...sub,
+      taskPriority: toKey(sub.taskPriority) ?? TaskPriority["无优先级"],
+      taskStatus: toKey(sub.taskStatus) ?? TaskStatus["未完成"],
+    })),
+  };
+};
+
+/**
  * 获取任务列表
  */
 const getAllTaskList = async (dbName) => {
   // 获取任务列表
   const res = await httpTaskGetAll(dbName);
-  state.taskList = res.data ?? [];
+  const normalized = (res.data ?? []).map(normalizeTask);
+  state.taskList = normalized;
 
   // 设置任务列表到pinia，方便随时使用原始数据
-  store.propertyTaskData = res.data;
+  store.propertyTaskData = normalized;
 
   // 排序任务列表
   sortTaskList(state.taskList, state.nowSortType);
@@ -307,7 +330,7 @@ const handleEditTaskSubmit = editTaskWithReload(async (e) => {
 const handleAddSubTaskSubmit = addSubWithReload(async (e) => {
   const { parentId } = e;
   const parentTaskIndex = state.taskList.findIndex(
-    (item) => item.id === parentId
+    (item) => item.id === parentId,
   );
 
   if (parentTaskIndex !== -1) {
@@ -335,7 +358,7 @@ const handleAddSubTaskSubmit = addSubWithReload(async (e) => {
 const handleEditSubTaskSubmit = editSubWithReload(async (e) => {
   const { parentId } = e;
   const parentTask = _.cloneDeep(
-    state.taskList.find((item) => item.id === parentId)
+    state.taskList.find((item) => item.id === parentId),
   );
 
   parentTask.subTasks =
@@ -371,7 +394,7 @@ const handleDeleteAllDoneTask = () => {
   });
 
   const listForDel = taskList.filter(
-    (item) => item.taskStatus === TaskStatus["已删除"]
+    (item) => item.taskStatus === TaskStatus["已删除"],
   );
 
   deleteAllDoneTaskWithReload(deleteTaskListBatch)(listForDel);
@@ -386,7 +409,7 @@ watch(
   (newVal) => {
     state.nowUseDBName = ApiType[newVal];
     getAllTaskList(ApiType[newVal]);
-  }
+  },
 );
 // ================== 数据监听end ==================
 
