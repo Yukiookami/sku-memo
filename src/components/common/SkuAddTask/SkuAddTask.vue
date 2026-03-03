@@ -68,6 +68,14 @@
 
             <span>{{ state.taskStatusName }}</span>
           </div>
+
+          <!-- 提醒时间 -->
+          <sku-notify-picker
+            v-model="task.notifyTime"
+            v-model:urgentMinutes="task.urgentMinutes"
+            v-model:repeatNotify="task.repeatNotify"
+          />
+          <!-- 提醒时间end -->
         </div>
         <!-- 左侧区域end -->
 
@@ -77,6 +85,7 @@
           <nut-button
             :type="state.buttonType"
             @click="state.handleClick"
+            :disabled="!task.taskName?.trim()"
             size="small"
           >
             {{ state.buttonText }}
@@ -125,6 +134,7 @@
 
 <script setup>
 import SkuPriorityText from "../../ui/SkuPriorityText.vue";
+import SkuNotifyPicker from "../../ui/SkuNotifyPicker.vue";
 import { computed, onBeforeMount, reactive, toRaw, watch } from "vue";
 import { ref } from "vue";
 import {
@@ -133,6 +143,10 @@ import {
   TaskStatusIcon,
 } from "../../../assets/data/status";
 import { convertEnumToArray } from "../../../utils";
+import {
+  scheduleTaskNotification,
+  cancelTaskNotification,
+} from "../../../utils/notification";
 import { useStore } from "../../../stores";
 import { showConfirmDialog } from "vant";
 
@@ -188,6 +202,12 @@ const task = reactive({
   subTasks: [],
   // 当前任务状态
   taskStatus: TaskStatus["未完成"],
+  // 提醒时间（时间戳毫秒）
+  notifyTime: null,
+  // 紧急提前分钟数
+  urgentMinutes: null,
+  // 每5分钟重复提醒
+  repeatNotify: false,
 });
 
 // 优先级选择框数据
@@ -248,13 +268,18 @@ const handleClickAddIcon = () => {
  * 确认添加
  */
 const handleSubmit = async () => {
-  emit("submit", {
+  const newTask = {
     taskName: task.taskName,
     taskStatus: task.taskStatus ?? TaskStatus["未完成"],
     taskPriority: task.taskPriority ?? TaskPriority["无优先级"],
     taskGroup: task.taskGroup ?? false,
     createTime: new Date().getTime(),
-  });
+    notifyTime: task.notifyTime ?? null,
+    urgentMinutes: task.urgentMinutes ?? null,
+    repeatNotify: task.repeatNotify ?? false,
+  };
+  emit("submit", newTask);
+  // 设置通知（id 由父组件写入后触发，此处暂存，父组件添加后通过 store 触发）
   task.taskName = "";
   show.value = false;
   showPriority.value = false;
@@ -287,7 +312,7 @@ const handleEditSubmit = async () => {
       (item) => (item.id ?? item.taskId) === editData.taskId,
     ) ?? {};
 
-  emit("editSubmit", {
+  const editedTask = {
     taskName: task.taskName,
     taskStatus: task.taskStatus ?? TaskStatus["未完成"],
     taskPriority: task.taskPriority ?? TaskPriority["无优先级"],
@@ -296,7 +321,16 @@ const handleEditSubmit = async () => {
     subTasks: task.taskGroup ? toRaw(thisTask.subTasks) || [] : [],
     createTime: editData.createTime,
     updateTime: new Date().getTime(),
-  });
+    notifyTime: task.notifyTime ?? null,
+    urgentMinutes: task.urgentMinutes ?? null,
+    repeatNotify: task.repeatNotify ?? false,
+  };
+  // 先取消旧通知，再设置新通知
+  await cancelTaskNotification(editData.taskId);
+  if (editedTask.notifyTime) {
+    await scheduleTaskNotification({ id: editData.taskId, ...editedTask });
+  }
+  emit("editSubmit", editedTask);
   task.taskName = "";
   show.value = false;
   showPriority.value = false;
@@ -343,6 +377,15 @@ const clearData = () => {
     },
     subTasks: () => {
       return [];
+    },
+    notifyTime: () => {
+      return null;
+    },
+    urgentMinutes: () => {
+      return null;
+    },
+    repeatNotify: () => {
+      return false;
     },
     default: () => {
       return "";
@@ -506,6 +549,9 @@ watch(
     task.taskGroup = editData.taskGroup;
     task.subTasks = editData.subTasks;
     task.taskStatus = editData.taskStatus;
+    task.notifyTime = editData.notifyTime ?? null;
+    task.urgentMinutes = editData.urgentMinutes ?? null;
+    task.repeatNotify = editData.repeatNotify ?? false;
     priorityState.selectedPriority = [editData.taskPriority];
     state.isEdit = true;
     show.value = true;
@@ -540,89 +586,28 @@ watch(
 }
 
 .add-task-sec {
-  display: flex;
-  flex-direction: column;
-
   // 功能按钮区域
   .add-task-fun-sec {
-    ::v-deep .nut-button__wrap {
-      margin-top: -1px;
-    }
-
     height: 60px;
     padding: 5px 10px 30px 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 
-    // 左侧区域
-    .left-sec {
-      display: flex;
-      align-items: center;
-
-      // 优先级，子任务, 任务组当前状态
-      .task-priority,
-      .task-group,
-      .task-status {
-        display: flex;
-        align-items: center;
-        margin-right: 12px;
-        cursor: pointer;
-        transition: all 0.1s;
-
-        // 选中创建组
-        &.task-group-actived {
-          color: $primary-color;
-
-          .icon-taskGroup {
-            &::before {
-              color: $primary-color;
-            }
-          }
-        }
-
-        .icon-priority,
-        .icon-taskGroup,
-        .status-icon {
-          transition: all 0.15s;
-          font-size: 14px;
-          margin-right: 3px;
-        }
-
-        // 任务状态的整体颜色变化
-        // 完成
-        &.task-status-icon-ok {
+    // 任务状态的整体颜色变化
+    .task-status {
+      // 完成
+      &.task-status-icon-ok {
+        color: $task-done-color;
+        .icon-ok::before {
           color: $task-done-color;
-          .icon-ok {
-            &::before {
-              color: $task-done-color;
-            }
-          }
-        }
-
-        // 删除
-        &.task-status-icon-delete {
-          color: $task-delete-color;
-
-          .icon-delete {
-            &::before {
-              color: $task-delete-color;
-            }
-          }
-        }
-
-        span {
-          display: block;
-          font-size: 12px;
-          font-weight: bolder;
         }
       }
-    }
 
-    // 右侧区域
-    .right-sec {
-      display: flex;
-      align-items: center;
+      // 删除
+      &.task-status-icon-delete {
+        color: $task-delete-color;
+        .icon-delete::before {
+          color: $task-delete-color;
+        }
+      }
     }
   }
 }

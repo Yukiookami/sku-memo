@@ -25,6 +25,20 @@
               {{ props.taskName }}
             </span>
           </sku-priority-text>
+          <!-- 提醒时间标签 -->
+          <span
+            v-if="props.notifyTime"
+            class="notify-tag"
+            :class="{ 'notify-tag-notified': isNotified }"
+          >
+            <i v-if="props.urgentMinutes" class="icon-priority"></i>
+            {{ isNotified ? `已提醒 ${notifyText}` : notifyText
+            }}<i
+              v-if="props.repeatNotify && !isNotified"
+              class="icon-todo notify-repeat-icon"
+            ></i>
+          </span>
+          <!-- 提醒时间标签end -->
           <template #icon>
             <i class="icon-select"></i>
           </template>
@@ -54,7 +68,7 @@
 </template>
 
 <script setup>
-import { onBeforeMount, reactive, watch } from "vue";
+import { onBeforeMount, reactive, watch, computed } from "vue";
 import {
   CloseCellType,
   TaskPriority,
@@ -65,6 +79,7 @@ import { showConfirmDialog } from "vant";
 import SkuCard from "../../ui/SkuCard.vue";
 import SkuPriorityText from "../../ui/SkuPriorityText.vue";
 import SkuSwipe from "../../ui/SkuSwipe.vue";
+import { formatNotifyTime } from "../../../utils/notification";
 
 const store = useStore();
 
@@ -97,9 +112,32 @@ const props = defineProps({
     type: Number,
     default: null,
   },
+  notifyTime: {
+    type: Number,
+    default: null,
+  },
+  urgentMinutes: {
+    type: Number,
+    default: null,
+  },
+  repeatNotify: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emit = defineEmits(["taskChange"]);
+
+// 提醒时间是否已过期
+const isNotified = computed(() => {
+  if (!props.notifyTime) return false;
+  return new Date(props.notifyTime) <= new Date();
+});
+
+// 提醒时间显示文字
+const notifyText = computed(() => {
+  return formatNotifyTime(props.notifyTime);
+});
 
 const state = reactive({
   // 确认是否完成任务
@@ -175,7 +213,7 @@ onBeforeMount(() => {
     () => props.taskStatus,
     (val) => {
       state.usedTaskStatus = val === TaskStatus["已完成"];
-    }
+    },
   );
 });
 </script>
@@ -197,6 +235,50 @@ onBeforeMount(() => {
       &.closed {
         text-decoration: line-through;
         color: #ccc !important;
+      }
+    }
+
+    // 提醒时间标签
+    .notify-tag {
+      position: absolute;
+      right: 0;
+      bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      font-size: 10px;
+      color: $primary-color;
+      pointer-events: none;
+
+      i {
+        font-size: 11px;
+        color: $primary-color !important;
+        &::before {
+          color: $primary-color !important;
+        }
+      }
+
+      .notify-repeat-icon {
+        font-size: 10px;
+        margin: 1.5px 0 0 1px;
+        font-weight: bolder;
+        color: $primary-color;
+        &::before {
+          color: $primary-color !important;
+        }
+      }
+
+      // 已提醒状态
+      &.notify-tag-notified {
+        color: #bbb;
+        text-decoration: line-through;
+
+        i {
+          color: #bbb !important;
+          &::before {
+            color: #bbb !important;
+          }
+        }
       }
     }
 

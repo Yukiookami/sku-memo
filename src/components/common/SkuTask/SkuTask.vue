@@ -20,6 +20,9 @@
           :parentId="null"
           :createTime="item.createTime"
           :updateTime="item.updateTime"
+          :notifyTime="item.notifyTime ?? null"
+          :urgentMinutes="item.urgentMinutes ?? null"
+          :repeatNotify="item.repeatNotify ?? false"
           @taskChange="handleChange"
         />
 

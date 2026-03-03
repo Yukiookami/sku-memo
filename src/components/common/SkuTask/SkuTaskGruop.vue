@@ -63,6 +63,9 @@
           :taskStatus="item.taskStatus"
           :taskId="item.taskId"
           :taskPriority="item.taskPriority"
+          :notifyTime="item.notifyTime ?? null"
+          :urgentMinutes="item.urgentMinutes ?? null"
+          :repeatNotify="item.repeatNotify ?? false"
           @taskChange="handleChange"
           :parentId="parentId"
         />
@@ -145,7 +148,7 @@ const state = reactive({
   // 确认未完成的任务数量
   todoCount: computed(() => {
     return props.subTasks.filter(
-      (item) => item.taskStatus === TaskStatus["未完成"]
+      (item) => item.taskStatus === TaskStatus["未完成"],
     ).length;
   }),
 });
@@ -227,7 +230,7 @@ const throttledToggleOpen = throttle(
   },
   300,
   // 限制只有在 leading edge（即首次触发）时执行
-  { leading: true, trailing: false }
+  { leading: true, trailing: false },
 );
 
 /**
@@ -244,7 +247,7 @@ watch(
     if (props.subTasks.length > 0) {
       isOpen.value = true;
     }
-  }
+  },
 );
 </script>
 

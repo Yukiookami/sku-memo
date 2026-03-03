@@ -33,6 +33,8 @@ import {
   Input,
   Button,
   Picker,
+  DatePicker,
+  Switch,
 } from "@nutui/nutui";
 import "@nutui/nutui/dist/style.css";
 // nutUI end
@@ -74,6 +76,10 @@ app.use(Input);
 app.use(Button);
 // 挂载选择器
 app.use(Picker);
+// 挂载日期选择器
+app.use(DatePicker);
+// 挂载Switch
+app.use(Switch);
 // nutUI end
 
 // 挂载vant

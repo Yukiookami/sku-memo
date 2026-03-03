@@ -77,3 +77,62 @@ textarea {
 .van-dialog {
   font-family: "chinese-font";
 }
+
+/* 任务追加面板共用样式（SkuAddTask / SkuAddSubTask） */
+.add-task-sec {
+  display: flex;
+  flex-direction: column;
+
+  .add-task-fun-sec {
+    ::v-deep .nut-button__wrap {
+      margin-top: -1px;
+    }
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    // 左侧区域
+    .left-sec {
+      display: flex;
+      align-items: center;
+
+      .task-priority,
+      .task-group,
+      .task-status {
+        display: flex;
+        align-items: center;
+        margin-right: 12px;
+        cursor: pointer;
+        transition: all 0.1s;
+
+        &.task-group-actived {
+          color: $primary-color;
+          .icon-taskGroup::before {
+            color: $primary-color;
+          }
+        }
+
+        .icon-priority,
+        .icon-taskGroup,
+        .status-icon {
+          transition: all 0.15s;
+          font-size: 14px;
+          margin-right: 3px;
+        }
+
+        span {
+          display: block;
+          font-size: 12px;
+          font-weight: bolder;
+        }
+      }
+    }
+
+    // 右侧区域
+    .right-sec {
+      display: flex;
+      align-items: center;
+    }
+  }
+}

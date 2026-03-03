@@ -16,6 +16,12 @@ export const schema = {
   createTime: "",
   // 更新时间
   updateTime: "",
+  // 提醒时间（时间戳毫秒，null 表示不提醒）
+  notifyTime: null,
+  // 紧急提前分钟数（null 表示不开启紧急模式）
+  urgentMinutes: null,
+  // 是否每5分钟重复提醒（直到主提醒时间）
+  repeatNotify: false,
   // 子任务（taskGroup为true时，该字段有效）
   subTasks: [
     {
@@ -33,6 +39,12 @@ export const schema = {
       createTime: "",
       // 更新时间
       updateTime: "",
+      // 提醒时间（时间戳毫秒，null 表示不提醒）
+      notifyTime: null,
+      // 紧急提前分钟数（null 表示不开启紧急模式）
+      urgentMinutes: null,
+      // 是否每5分钟重复提醒
+      repeatNotify: false,
     },
   ],
 };

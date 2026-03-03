@@ -56,6 +56,7 @@ import {
   TaskStatus,
 } from "../assets/data/status";
 import { generateUUID } from "../utils";
+import { cancelTaskNotification } from "../utils/notification";
 import _ from "lodash";
 
 // Pinia store
@@ -287,10 +288,17 @@ const sortTaskList = (taskList, nowSortType) => {
  * 根据返回的任务id与任务状态，更新任务状态
  * @param e 返回的任务id与任务状态
  */
-const handleTaskChange = (e) => {
+const handleTaskChange = async (e) => {
   // 判断是否为子任务
   const isSub = e.parentId !== null && !e.taskGroup;
   const { taskId, taskStatus } = e;
+  // 状态崔局 已完成/已删除 时取消通知
+  if (
+    taskStatus === TaskStatus["已完成"] ||
+    taskStatus === TaskStatus["已删除"]
+  ) {
+    await cancelTaskNotification(taskId);
+  }
   if (isSub) {
     handleEditSubTaskSubmit(e);
   } else {
