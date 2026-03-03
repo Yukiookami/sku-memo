@@ -15,13 +15,11 @@
       @click-overlay="handleClickSideMenuMask"
     >
       <div class="sidebar-context">
-        <sku-text
+        <img
           @click="handleClickSideMenuMask"
           class="logo-title"
-          :title="HeaderTitle"
-          :type="TextType['标题1号']"
-          :fontType="TextFont['header标题字体']"
-          useNeonGradient
+          src="/logo/logo.png"
+          alt="logo"
         />
 
         <sku-side-item :sideBarList="sidebarMenu" />
@@ -31,12 +29,10 @@
 </template>
 
 <script setup>
-import { HeaderTitle, TextFont, TextType } from "../../../assets/data/status";
 import SkuSideItem from "./SkuSideItem.vue";
 import { sidebarMenu } from "../../../assets/data/componentsData";
 import { ref, watch } from "vue";
 import { useStore } from "../../../stores";
-import SkuText from "../../ui/SkuText.vue";
 
 const store = useStore();
 
@@ -51,7 +47,7 @@ watch(
   () => store.isSidebarOpen,
   (val) => {
     showLeft.value = val;
-  }
+  },
 );
 </script>
 
@@ -72,7 +68,11 @@ watch(
     padding: 35px 0;
 
     .logo-title {
-      margin: 20px 0 40px 0;
+      margin: 27px 0 40px 0;
+      height: 28px;
+      width: auto;
+      display: block;
+      cursor: pointer;
     }
   }
 }

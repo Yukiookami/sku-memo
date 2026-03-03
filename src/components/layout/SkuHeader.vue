@@ -16,12 +16,7 @@
 
     <!-- 中部 -->
     <div>
-      <sku-text
-        :title="HeaderTitle"
-        :type="TextType['标题1号']"
-        :fontType="TextFont['header标题字体']"
-        :useNeonGradient="true"
-      />
+      <img src="/logo/logo.png" class="header-logo" alt="logo" />
     </div>
 
     <!-- 右部 -->
@@ -30,9 +25,7 @@
 </template>
 
 <script setup>
-import { HeaderTitle, TextFont, TextType } from "../../assets/data/status";
 import { useStore } from "../../stores";
-import SkuText from "../ui/SkuText.vue";
 
 const store = useStore();
 
@@ -55,6 +48,12 @@ const handleClickSideMenu = () => {
   .side-menu {
     font-size: 1rem;
     cursor: pointer;
+  }
+
+  .header-logo {
+    height: 24px;
+    width: auto;
+    display: block;
   }
 }
 </style>

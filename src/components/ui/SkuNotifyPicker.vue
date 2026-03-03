@@ -7,6 +7,7 @@
     :class="{ 'notify-actived': !!modelValue }"
     @click="handleOpen"
   >
+    <i class="icon-todo"></i>
     <i v-if="modelValue && urgentMinutes" class="icon-priority"></i>
     <span>{{ displayText }}</span>
     <i
